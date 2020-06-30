@@ -5,3 +5,25 @@ export const COLORS = {
         BLACK: 'rgba(0, 0, 0, 0.87)'
     }
 }
+export const SIGNUP = {
+    name: {
+        min: 4,
+        max: 40,
+        helperText: ""
+    },
+    username: {
+        min: 3,
+        max: 15,
+        helperText: ""
+    },
+    password: {
+        min: 6,
+        max: 20,
+        helperText: ""
+    },
+    email: {
+        min: 1,
+        max: 40,
+        helperText: ""
+    }
+}
