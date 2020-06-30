@@ -42,4 +42,7 @@ public class Role {
     public Role() {
     }
     
+    public Role(RoleName name) {
+        this.name = name;
+    }
 }

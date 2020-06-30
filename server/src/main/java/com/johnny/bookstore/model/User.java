@@ -40,11 +40,11 @@ public class User extends DateAudit{
     private Long id;
     
     @NotBlank
-    @Max(value = 50)
+    @Size(max = 40)
     private String name;
     
     @NotBlank
-    @Max(value = 15)
+    @Size(max = 15)
     private String username;
 
     @NaturalId
@@ -54,7 +54,7 @@ public class User extends DateAudit{
     private String email;
 
     @NotBlank
-    @Max(value = 100)
+    @Size(max = 100)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -111,5 +111,16 @@ public class User extends DateAudit{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public User() {
+    }
+
+    public User(@NotBlank @Max(50) String name, @NotBlank @Max(15) String username,
+            @NotBlank @Size(max = 40) @Email String email, @NotBlank @Max(100) String password) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 }
