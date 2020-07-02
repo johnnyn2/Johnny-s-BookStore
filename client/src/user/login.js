@@ -27,11 +27,6 @@ export const Login = (props) => {
         const handleKeyDown = e => {
             switch(e.keyCode) {
                 case 13:
-                    props.setSnackBar({
-                        open: true,
-                        message: "Signing in...",
-                        severity: "info"
-                    })
                     handleSubmit(e); break;      
                 default:
             }
