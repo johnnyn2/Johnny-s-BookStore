@@ -20,11 +20,11 @@ const request = (options) => {
     }))
 }
 
-export const signup = (request) => {
+export const signup = (data) => {
     return request({
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
-        body: JSON.stringify(request)
+        body: JSON.stringify(data)
     });
 }
 

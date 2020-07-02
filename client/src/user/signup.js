@@ -109,9 +109,10 @@ export const SignUp = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const request = {
-            ...state.form
-        };
+        const request = {};
+        Object.keys(state).forEach(key => {
+            request[key] = state[key].value;
+        })
         signup(request)
         .then(res => {
             console.log('signup success: ', res);
