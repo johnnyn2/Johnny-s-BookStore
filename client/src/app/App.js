@@ -82,7 +82,7 @@ function App(props) {
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div>
         <Switch>
-          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser}/>}/>
+          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
