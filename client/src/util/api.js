@@ -20,6 +20,14 @@ const request = (options) => {
     }))
 }
 
+export const signin = (data) => {
+    return request({
+        url: API_BASE_URL + "/auth/signin",
+        method: 'POST',
+        body: JSON.stringify(data)
+    });
+}
+
 export const signup = (data) => {
     return request({
         url: API_BASE_URL + "/auth/signup",

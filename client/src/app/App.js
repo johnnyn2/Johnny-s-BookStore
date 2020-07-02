@@ -31,9 +31,20 @@ function App(props) {
     getCurrentUser().then(res => {
       setCurrentUser(res);
       setIsAuthenticated(true);
-      setIsLoading(true);
+      setIsLoading(false);
+      props.history.push("/");
+      setSnackBar({
+        open: true,
+        message: "You have successfully signed in",
+        severity: "success"
+      });
     }).catch(err => {
       setIsLoading(false);
+      setSnackBar({
+        open: true,
+        message: "Something went wrong",
+        severity: "error"
+      })
     })
   }
 
@@ -47,13 +58,19 @@ function App(props) {
 
   const handleLogin = () => {
     loadCurrentUser();
-    props.history.push("/");
   }
 
   const controlSnackBar = (open) => setSnackBar((prevState) => ({...prevState, open,}));
 
   useEffect(() => {
-    loadCurrentUser();
+    if (localStorage.getItem(ACCESS_TOKEN)) {
+      setSnackBar({
+        open: true,
+        message: "Trying to sign in",
+        severity: "info"
+      })
+      loadCurrentUser();
+    }
   }, [])
   return (
     <div>
@@ -61,12 +78,12 @@ function App(props) {
       <div>
         <Switch>
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser}/>}/>
-          <Route path="/login" render={(props) => <Login onLogin={handleLogin} {...props}/>}/>
+          <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </div>
-      <Snackbar open={snackBar.open} onClose={() => controlSnackBar(false)}>
+      <Snackbar autoHideDuration={5000} open={snackBar.open} onClose={() => controlSnackBar(false)}>
         <Alert onClose={() => controlSnackBar(false)} severity={snackBar.severity}>
           {snackBar.message}
         </Alert>
