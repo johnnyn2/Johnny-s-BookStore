@@ -52,7 +52,7 @@ export const SignUp = (props) => {
         const max = SIGNUP[name].max;
         const regex = SIGNUP[name].regex;
         const helperText = SIGNUP[name].helperText;
-        const {error, errorText} = validator(value, min, max, regex, helperText);
+        const {error, errorText} = validator(value, min, max, helperText, regex);
         setState(prevState => ({
             ...prevState,
             [name]: {
@@ -98,18 +98,11 @@ export const SignUp = (props) => {
                 label="Username"
                 value={state.username.value}
                 fullWidth
-                onChange={(e) => {
-                    handleInput(e);
-                    let error = false;
-                    const errorText = ""
-                    if (state.username.value.length < 3 || state.username.value.length > 15) {
-                        error = true;
-                        errorText = "The username should be 3 to 15 characters length.";
-                    }
-
-                }}
+                onChange={(e) => handleInput(e)}
+                error={state.username.error}
+                helperText={state.username.errorText}
             /> 
-            <FormControl fullWidth>
+            <FormControl fullWidth error={state.password.error}>
                 <InputLabel htmlFor="password-input">Password</InputLabel>
                 <Input
                     id="password-input"
@@ -133,6 +126,7 @@ export const SignUp = (props) => {
                     </InputAdornment>
                     }
                 />
+                <FormHelperText id="password-error-helperText">{state.password.errorText}</FormHelperText>
             </FormControl>
             <TextField
                 id="name-input"
@@ -141,6 +135,8 @@ export const SignUp = (props) => {
                 value={state.name.value}
                 fullWidth
                 onChange={e => handleInput(e)}
+                error={state.name.error}
+                helperText={state.name.errorText}
             />
             <TextField
                 id="email-input"
@@ -149,6 +145,8 @@ export const SignUp = (props) => {
                 value={state.email.value}
                 fullWidth
                 onChange={e => handleInput(e)}
+                error={state.email.error}
+                helperText={state.email.errorText}
             />
             <div style={{display:'flex', width: '100%', justifyContent: 'center', marginTop: 20}}>
                 <Button

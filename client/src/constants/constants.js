@@ -9,21 +9,33 @@ export const SIGNUP = {
     name: {
         min: 4,
         max: 40,
-        helperText: ""
+        helperText: "",
+        regex: null,
     },
     username: {
         min: 3,
         max: 15,
-        helperText: ""
+        helperText: "",
+        regex: null,
     },
     password: {
         min: 6,
         max: 20,
-        helperText: ""
+        helperText: "",
+        regex: null,
     },
     email: {
         min: 1,
         max: 40,
-        helperText: ""
+        helperText: "Invalid email address. Example: HelloWorld@gmail.com",
+        regex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    }
+}
+
+export const getFieldLengthErrText = (length, min, max) => {
+    if (min !==0 && length === 0) {
+        return 'This field should not be empty';
+    } else if (length < min || length > max) {
+        return `This field should have at least ${min} and at most ${max} characters`;
     }
 }
