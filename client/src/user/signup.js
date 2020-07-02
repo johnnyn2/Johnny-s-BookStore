@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import _ from 'underscore';
-import {SIGNUP} from '../constants/constants';
+import {SIGNUP, getAlreadyExistErrorText} from '../constants/constants';
 import {validator} from '../util/validator';
-import { signup } from '../util/api';
+import { signup, checkUsernameAvailability, checkEmailAvailability } from '../util/api';
 import { Typography, Button, InputLabel, IconButton, Input, InputAdornment, FormHelperText, TextField, Container, FormControl } from '@material-ui/core';
 
 export const SignUp = (props) => {
@@ -63,6 +63,40 @@ export const SignUp = (props) => {
         }))
     }
 
+    const checkUsernameOrEmailAvailability = (field) => {
+        if (!state[field].error) {
+            if (field === "username") {
+                checkUsernameAvailability(state.username.value)
+                .then(res => {
+                    if (!res.available) {
+                        setState((prevState) => ({
+                            ...prevState,
+                            username: {
+                                ...prevState.username,
+                                error: true,
+                                errorText: getAlreadyExistErrorText("Username"),
+                            }
+                        }))
+                    }
+                }).catch(err => console.log(err));
+            } else if (field === "email") {
+                checkEmailAvailability(state.email.value)
+                .then(res => {
+                    if (!res.available) {
+                        setState((prevState) => ({
+                            ...prevState,
+                            email: {
+                                ...prevState.email,
+                                error: true,
+                                errorText: getAlreadyExistErrorText("Email"),
+                            }
+                        }))
+                    }
+                }).catch(err => console.log(err));
+            }
+        }
+    }
+
     const isFormReady = () => {
         let isReady = true;
         Object.keys(state).forEach(key => {
@@ -99,6 +133,7 @@ export const SignUp = (props) => {
                 value={state.username.value}
                 fullWidth
                 onChange={(e) => handleInput(e)}
+                onBlur={() => checkUsernameOrEmailAvailability('username')}
                 error={state.username.error}
                 helperText={state.username.errorText}
             /> 
@@ -145,6 +180,7 @@ export const SignUp = (props) => {
                 value={state.email.value}
                 fullWidth
                 onChange={e => handleInput(e)}
+                onBlur={() => checkUsernameOrEmailAvailability('email')}
                 error={state.email.error}
                 helperText={state.email.errorText}
             />

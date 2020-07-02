@@ -31,7 +31,7 @@ export const SIGNUP = {
         regex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     }
 }
-
+export const getAlreadyExistErrorText = (field) => `${field} already exists`;
 export const getFieldLengthErrText = (length, min, max) => {
     if (min !==0 && length === 0) {
         return 'This field should not be empty';

@@ -35,6 +35,13 @@ export const checkUsernameAvailability = (username) => {
     })
 }
 
+export const checkEmailAvailability = (email) => {
+    return request({
+        url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
+        method: 'GET'
+    })
+}
+
 export const getCurrentUser = () => {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No Access Token");
