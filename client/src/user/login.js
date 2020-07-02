@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Typography, Button, InputLabel, IconButton, Input, InputAdornment, FormHelperText, TextField, Container, FormControl } from '@material-ui/core';
@@ -22,6 +22,24 @@ export const Login = (props) => {
         }
     };
     const [state, setState] = useState(initState);
+
+    useEffect(()=>{
+        const handleKeyDown = e => {
+            switch(e.keyCode) {
+                case 13:
+                    props.setSnackBar({
+                        open: true,
+                        message: "Signing in...",
+                        severity: "info"
+                    })
+                    handleSubmit(e); break;      
+                default:
+            }
+        }
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    },[state])
 
     const handleInput = (e) => {
         const target = e.target;
@@ -65,6 +83,9 @@ export const Login = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!isFormReady()) {
+            return;
+        }
         const request = {};
         Object.keys(state).forEach(key => {
             request[key] = state[key].value;
@@ -76,7 +97,7 @@ export const Login = (props) => {
         }).catch(err => {
             props.setSnackBar({
                 open: true,
-                message: "Something went wrong",
+                message: "Invalid username or password",
                 severity: "error"
             })
         })

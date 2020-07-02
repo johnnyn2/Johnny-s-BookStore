@@ -13,7 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import PropTypes from 'prop-types';
-import { COLORS } from '../constants/constants';
+import { COLORS, ACCESS_TOKEN } from '../constants/constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,14 +79,14 @@ export const AppHeader = (props) => {
                         <div>
                             <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                             <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={() => props.onLogout()}>Sign out</MenuItem>
                         </div> :
                         <div>
                             <Link to="/login" style={{textDecoration: 'none', color: COLORS.FONTS.BLACK}}>
-                                <MenuItem onClick={handleClose}>Login</MenuItem>
+                                <MenuItem onClick={handleClose}>Sign In</MenuItem>
                             </Link>
                             <Link to="/signup" style={{textDecoration: 'none', color: COLORS.FONTS.BLACK}}>
-                                <MenuItem onClick={handleClose}>Signup</MenuItem>
+                                <MenuItem onClick={handleClose}>Sign Up</MenuItem>
                             </Link>
                         </div>
                     }

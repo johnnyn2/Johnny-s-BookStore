@@ -35,7 +35,7 @@ function App(props) {
       props.history.push("/");
       setSnackBar({
         open: true,
-        message: "You have successfully signed in",
+        message: "You're successfully signed in",
         severity: "success"
       });
     }).catch(err => {
@@ -48,12 +48,17 @@ function App(props) {
     })
   }
 
-  const handleLogout = (redirectTo="/", type="success", description="You're successfully logged out.") => {
+  const handleLogout = (redirectTo="/", message="You're successfully signed out.") => {
     localStorage.removeItem(ACCESS_TOKEN);
     setCurrentUser(null);
     setIsAuthenticated(false);
 
     props.history.push(redirectTo);
+    setSnackBar({
+      open: true,
+      message,
+      severity: "success"
+    })
   }
 
   const handleLogin = () => {
@@ -74,7 +79,7 @@ function App(props) {
   }, [])
   return (
     <div>
-      <AppHeader currentUser={currentUser}/>
+      <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div>
         <Switch>
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser}/>}/>
