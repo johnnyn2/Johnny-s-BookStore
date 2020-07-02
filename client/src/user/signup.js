@@ -115,10 +115,18 @@ export const SignUp = (props) => {
         })
         signup(request)
         .then(res => {
-            console.log('signup success: ', res);
             props.history.push("/login");
+            props.setSnackBar({
+                open: true,
+                message: "You have succesfully registered",
+                severity: "success"
+            })
         }).catch(err => {
-            console.log('signup error: ', err);
+            props.setSnackBar({
+                open: true,
+                message: "Something went wrong",
+                severity: "error"
+            })
         })
     }
 

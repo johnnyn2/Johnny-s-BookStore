@@ -13,11 +13,17 @@ import LoadingIndicator from '../common/LoadingIndicator';
 import Store from '../pages/Store';
 import { getCurrentUser } from '../util/api';
 import { ACCESS_TOKEN } from '../constants/constants';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function App(props) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [snackBar, setSnackBar] = useState({open: false, message: "", severity: ""});
   const [isLoading, setIsLoading] = useState(false);
   
   const loadCurrentUser = () => {
@@ -44,6 +50,8 @@ function App(props) {
     props.history.push("/");
   }
 
+  const controlSnackBar = (open) => setSnackBar((prevState) => ({...prevState, open,}));
+
   useEffect(() => {
     loadCurrentUser();
   }, [])
@@ -54,10 +62,15 @@ function App(props) {
         <Switch>
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser}/>}/>
           <Route path="/login" render={(props) => <Login onLogin={handleLogin} {...props}/>}/>
-          <Route path="/signup" component={SignUp}></Route>
+          <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </div>
+      <Snackbar open={snackBar.open} onClose={() => controlSnackBar(false)}>
+        <Alert onClose={() => controlSnackBar(false)} severity={snackBar.severity}>
+          {snackBar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
