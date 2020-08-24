@@ -1,7 +1,13 @@
 package com.johnny.bookstore.payload.request;
+
+import java.util.List;
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.johnny.bookstore.model.Category;
 
 public class AddBook {
     @NotBlank
@@ -41,8 +47,7 @@ public class AddBook {
     @NotBlank
     private String isbn13;
 
-    @NotBlank
-    private String category;
+    private List<String> categories;
 
     public String getTitle() {
         return title;
@@ -74,14 +79,6 @@ public class AddBook {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getFormat() {
@@ -146,5 +143,13 @@ public class AddBook {
 
     public void setIsbn13(String isbn13) {
         this.isbn13 = isbn13;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

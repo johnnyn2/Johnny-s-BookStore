@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.johnny.bookstore.exception.ResourceNotFoundException;
 import com.johnny.bookstore.model.Book;
@@ -32,9 +34,16 @@ public class BookService {
                 addBook.getFormat(), addBook.getDimensions(), format.parse(addBook.getPublicationDate()),
                 addBook.getPublisher(), addBook.getPublicanCountry(), addBook.getLanguage(), addBook.getIsbn10(),
                 addBook.getIsbn13());
-            CategoryName categoryName = CategoryName.valueOf(addBook.getCategory());
-            Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book", "book", book));
-            book.setCategories(Collections.singleton(category));
+            Set<Category> categories = new HashSet<>();
+            for (String categoryStr: addBook.getCategories()) {
+                CategoryName categoryName = CategoryName.valueOf(categoryStr);
+                Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", book));
+                categories.add(category); 
+            }
+            book.setCategories(categories);
+            // CategoryName categoryName = CategoryName.valueOf(addBook.getCategory());
+            // Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book", "book", book));
+            // book.setCategories(Collections.singleton(category));
             return bookRepository.save(book);
         } catch (ParseException e) {
             e.printStackTrace();
