@@ -8,11 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.johnny.bookstore.exception.ResourceNotFoundException;
+import com.johnny.bookstore.model.Author;
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.model.Category;
 import com.johnny.bookstore.model.CategoryName;
 import com.johnny.bookstore.payload.request.AddBook;
-import com.johnny.bookstore.payload.response.ApiResponse;
+import com.johnny.bookstore.repository.AuthorRepository;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.CategoryRepository;
 
@@ -25,15 +26,23 @@ public class BookService {
     BookRepository bookRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    AuthorRepository authorRepository;
 
     public Book addBook(AddBook addBook) {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Book book;
         try {
-            book = new Book(addBook.getTitle(), addBook.getDescription(), addBook.getAuthor(), addBook.getPrice(),
+            book = new Book(addBook.getTitle(), addBook.getDescription(), addBook.getPrice(),
                 addBook.getFormat(), addBook.getDimensions(), format.parse(addBook.getPublicationDate()),
                 addBook.getPublisher(), addBook.getPublicanCountry(), addBook.getLanguage(), addBook.getIsbn10(),
                 addBook.getIsbn13());
+            Set<Author> authors = new HashSet<>();
+            for (String authorStr: addBook.getAuthors()) {
+                Author author = authorRepository.findByName(authorStr).orElseThrow(() -> new ResourceNotFoundException("Book Author", "Author", book));
+                authors.add(author);
+            }
+            book.setAuthors(authors);
             Set<Category> categories = new HashSet<>();
             for (String categoryStr: addBook.getCategories()) {
                 CategoryName categoryName = CategoryName.valueOf(categoryStr);

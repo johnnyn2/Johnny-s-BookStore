@@ -25,6 +25,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "book_categories",
@@ -40,8 +41,14 @@ public class Book {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private String author;
+    @NotNull
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "book_authors",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors = new HashSet<>();
 
     @NotNull
     private double price;
@@ -100,14 +107,6 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public double getPrice() {
@@ -182,13 +181,15 @@ public class Book {
         this.isbn13 = isbn13;
     }
 
-    public Book(@NotBlank @Size(max = 1000) String title, @NotBlank String description, @NotBlank String author,
-            @NotNull double price, @NotNull String format, @NotNull String dimensions, @NotNull Date publicationDate,
-            @NotNull String publisher, @NotNull String publicanCountry, @NotNull String language,
-            @NotNull String isbn10, @NotNull String isbn13) {
+    
+
+    public Book(@NotBlank @Size(max = 1000) String title,
+            @NotBlank String description, @NotNull double price, @NotBlank String format,
+            @NotBlank String dimensions, @NotNull Date publicationDate, @NotBlank String publisher,
+            @NotBlank String publicanCountry, @NotBlank String language, @NotBlank String isbn10,
+            @NotBlank String isbn13) {
         this.title = title;
         this.description = description;
-        this.author = author;
         this.price = price;
         this.format = format;
         this.dimensions = dimensions;
@@ -198,5 +199,13 @@ public class Book {
         this.language = language;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 }

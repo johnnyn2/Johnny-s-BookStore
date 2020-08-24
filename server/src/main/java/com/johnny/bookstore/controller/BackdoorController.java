@@ -30,6 +30,6 @@ public class BackdoorController {
         URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest().path("/{bookId}")
                         .buildAndExpand(book.getId()).toUri();
-        return ResponseEntity.created(location).body(new ApiResponse(true, "Book Added Successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "Book Added Successfully", book));
     }
 }

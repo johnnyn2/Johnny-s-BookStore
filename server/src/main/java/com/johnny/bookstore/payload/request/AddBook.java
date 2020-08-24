@@ -17,9 +17,6 @@ public class AddBook {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private String author;
-
     @NotNull
     private double price;
 
@@ -47,6 +44,8 @@ public class AddBook {
     @NotBlank
     private String isbn13;
 
+    private List<String> authors;
+
     private List<String> categories;
 
     public String getTitle() {
@@ -63,14 +62,6 @@ public class AddBook {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public double getPrice() {
@@ -151,5 +142,13 @@ public class AddBook {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 }
