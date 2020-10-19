@@ -6,6 +6,7 @@ import _ from 'underscore';
 import {SIGNIN, ACCESS_TOKEN} from '../constants/constants';
 import {validator} from '../util/validator';
 import {signin} from '../util/api';
+import PropTypes from 'prop-types';
 
 export const Login = (props) => {
     const initState = {
@@ -99,6 +100,13 @@ export const Login = (props) => {
     }
 
     const isFormValid = isFormReady();
+
+    const classes = {
+        mt: {
+            marginTop: 10,
+        }
+    }
+
     return (
         <Container maxWidth="md" style={{paddingTop: 20}}>
             <Typography display="block" variant="h4" color="primary">Sign In</Typography>
@@ -112,7 +120,7 @@ export const Login = (props) => {
                 error={state.usernameOrEmail.error}
                 helperText={state.usernameOrEmail.errorText}
             /> 
-            <FormControl fullWidth error={state.password.error}>
+            <FormControl fullWidth error={state.password.error} style={classes.mt}>
                 <InputLabel htmlFor="password-input">Password</InputLabel>
                 <Input
                     id="password-input"
@@ -159,6 +167,11 @@ export const Login = (props) => {
             </div>
         </Container>
     );
+}
+
+Login.propTypes = {
+    onLogin: PropTypes.func.isRequired,
+    setSnackBar: PropTypes.func.isRequired,
 }
 
 export default Login;

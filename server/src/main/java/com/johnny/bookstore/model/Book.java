@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -76,6 +75,9 @@ public class Book {
 
     @NotBlank
     private String isbn13;
+
+    @NotNull
+    private float rank;
 
     public Long getId() {
         return id;
@@ -183,11 +185,44 @@ public class Book {
 
     
 
-    public Book(@NotBlank @Size(max = 1000) String title,
-            @NotBlank String description, @NotNull double price, @NotBlank String format,
-            @NotBlank String dimensions, @NotNull Date publicationDate, @NotBlank String publisher,
-            @NotBlank String publicanCountry, @NotBlank String language, @NotBlank String isbn10,
-            @NotBlank String isbn13) {
+    // public Book(@NotBlank @Size(max = 1000) String title,
+    //         @NotBlank String description, @NotNull double price, @NotBlank String format,
+    //         @NotBlank String dimensions, @NotNull Date publicationDate, @NotBlank String publisher,
+    //         @NotBlank String publicanCountry, @NotBlank String language, @NotBlank String isbn10,
+    //         @NotBlank String isbn13) {
+    //     this.title = title;
+    //     this.description = description;
+    //     this.price = price;
+    //     this.format = format;
+    //     this.dimensions = dimensions;
+    //     this.publicationDate = publicationDate;
+    //     this.publisher = publisher;
+    //     this.publicanCountry = publicanCountry;
+    //     this.language = language;
+    //     this.isbn10 = isbn10;
+    //     this.isbn13 = isbn13;
+    // }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public float getRank() {
+        return rank;
+    }
+
+    public void setRank(float rank) {
+        this.rank = rank;
+    }
+
+    public Book(@NotBlank @Size(max = 1000) String title, @NotBlank String description, @NotNull double price,
+            @NotBlank String format, @NotBlank String dimensions, @NotNull Date publicationDate,
+            @NotBlank String publisher, @NotBlank String publicanCountry, @NotBlank String language,
+            @NotBlank String isbn10, @NotBlank String isbn13, @NotNull float rank) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -199,13 +234,6 @@ public class Book {
         this.language = language;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;
-    }
-
-    public Set<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+        this.rank = rank;
     }
 }

@@ -44,6 +44,9 @@ public class AddBook {
     @NotBlank
     private String isbn13;
 
+    @NotNull
+    private float rank;
+
     private List<String> authors;
 
     private List<String> categories;
@@ -150,5 +153,13 @@ public class AddBook {
 
     public void setAuthors(List<String> authors) {
         this.authors = authors;
+    }
+
+    public float getRank() {
+        return rank;
+    }
+
+    public void setRank(float rank) {
+        this.rank = rank;
     }
 }

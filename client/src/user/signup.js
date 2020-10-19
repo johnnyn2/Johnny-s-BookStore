@@ -6,6 +6,7 @@ import {SIGNUP, getAlreadyExistErrorText} from '../constants/constants';
 import {validator} from '../util/validator';
 import { signup, checkUsernameAvailability, checkEmailAvailability } from '../util/api';
 import { Typography, Button, InputLabel, IconButton, Input, InputAdornment, FormHelperText, TextField, Container, FormControl } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 export const SignUp = (props) => {
     const initState = {
@@ -132,6 +133,12 @@ export const SignUp = (props) => {
 
     const isFormValid = isFormReady();
 
+    const classes = {
+        mt: {
+            marginTop: 10,
+        },
+    }
+
     return (
         <Container maxWidth="md" style={{paddingTop: 20}}>
             <Typography display="block" variant="h4" color="primary">Sign Up</Typography>
@@ -146,7 +153,7 @@ export const SignUp = (props) => {
                 error={state.username.error}
                 helperText={state.username.errorText}
             /> 
-            <FormControl fullWidth error={state.password.error}>
+            <FormControl fullWidth error={state.password.error} style={classes.mt}>
                 <InputLabel htmlFor="password-input">Password</InputLabel>
                 <Input
                     id="password-input"
@@ -181,6 +188,7 @@ export const SignUp = (props) => {
                 onChange={e => handleInput(e)}
                 error={state.name.error}
                 helperText={state.name.errorText}
+                style={classes.mt}
             />
             <TextField
                 id="email-input"
@@ -192,6 +200,7 @@ export const SignUp = (props) => {
                 onBlur={() => checkUsernameOrEmailAvailability('email')}
                 error={state.email.error}
                 helperText={state.email.errorText}
+                style={classes.mt}
             />
             <div style={{display:'flex', width: '100%', justifyContent: 'center', marginTop: 20}}>
                 <Button
@@ -214,6 +223,13 @@ export const SignUp = (props) => {
             </div>
         </Container>
     );
+}
+
+SignUp.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired,
+    }),
+    setSnackBar: PropTypes.func.isRequired,
 }
 
 export default SignUp;

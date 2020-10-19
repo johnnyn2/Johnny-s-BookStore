@@ -2,9 +2,11 @@ package com.johnny.bookstore.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.johnny.bookstore.exception.ResourceNotFoundException;
@@ -13,12 +15,19 @@ import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.model.Category;
 import com.johnny.bookstore.model.CategoryName;
 import com.johnny.bookstore.payload.request.AddBook;
+import com.johnny.bookstore.payload.response.BookResponse;
+import com.johnny.bookstore.payload.response.PagedResponse;
 import com.johnny.bookstore.repository.AuthorRepository;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.CategoryRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
 public class BookService {
@@ -36,7 +45,7 @@ public class BookService {
             book = new Book(addBook.getTitle(), addBook.getDescription(), addBook.getPrice(),
                 addBook.getFormat(), addBook.getDimensions(), format.parse(addBook.getPublicationDate()),
                 addBook.getPublisher(), addBook.getPublicanCountry(), addBook.getLanguage(), addBook.getIsbn10(),
-                addBook.getIsbn13());
+                addBook.getIsbn13(), addBook.getRank());
             Set<Author> authors = new HashSet<>();
             for (String authorStr: addBook.getAuthors()) {
                 Author author = authorRepository.findByName(authorStr).orElseThrow(() -> new ResourceNotFoundException("Book Author", "Author", book));
@@ -58,5 +67,17 @@ public class BookService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public PagedResponse<BookResponse> getBooksByCategory(String categoryName, int page, int size) {
+        try {
+            Category category = categoryRepository.findByName(CategoryName.valueOf(categoryName)).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", null));
+
+            Pageable pageable = PageRequest.of(page, size);
+            bookRepository.findByCategory(category.getId(), pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new PagedResponse<BookResponse>();
     }
 }

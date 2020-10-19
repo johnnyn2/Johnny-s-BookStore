@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-export const Store = () => {
+export const Store = (props) => {
+    const initState = {};
+    const [state, setState] = useState(initState);
+
     return <span/>;
 }
 
