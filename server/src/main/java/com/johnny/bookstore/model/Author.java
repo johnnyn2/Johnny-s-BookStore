@@ -19,7 +19,6 @@ public class Author {
     @Size(max = 100)
     private String name;
 
-    @NotBlank
     private String profile;
 
     public Long getId() {

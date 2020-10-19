@@ -25,9 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
 public class BookService {
@@ -48,20 +46,31 @@ public class BookService {
                 addBook.getIsbn13(), addBook.getRank());
             Set<Author> authors = new HashSet<>();
             for (String authorStr: addBook.getAuthors()) {
-                Author author = authorRepository.findByName(authorStr).orElseThrow(() -> new ResourceNotFoundException("Book Author", "Author", book));
+                Author author = null;
+                if (!authorRepository.findByName(authorStr).isPresent()) {
+                    Author newAuthor = new Author();
+                    newAuthor.setName(authorStr);
+                    newAuthor.setProfile("");
+                    author = authorRepository.save(newAuthor); 
+                } else {
+                    author = authorRepository.findByName(authorStr).get();
+                }
                 authors.add(author);
             }
             book.setAuthors(authors);
             Set<Category> categories = new HashSet<>();
             for (String categoryStr: addBook.getCategories()) {
-                CategoryName categoryName = CategoryName.valueOf(categoryStr);
-                Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", book));
-                categories.add(category); 
+                Category category = null;
+                if (!categoryRepository.findByName(categoryStr).isPresent()) {
+                    Category newCategory = new Category();
+                    newCategory.setName(categoryStr);
+                    category = categoryRepository.save(newCategory);
+                } else {
+                    category = categoryRepository.findByName(categoryStr).get();
+                }
+                categories.add(category);
             }
             book.setCategories(categories);
-            // CategoryName categoryName = CategoryName.valueOf(addBook.getCategory());
-            // Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book", "book", book));
-            // book.setCategories(Collections.singleton(category));
             return bookRepository.save(book);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -71,7 +80,7 @@ public class BookService {
 
     public PagedResponse<BookResponse> getBooksByCategory(String categoryName, int page, int size) {
         try {
-            Category category = categoryRepository.findByName(CategoryName.valueOf(categoryName)).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", null));
+            Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", null));
 
             Pageable pageable = PageRequest.of(page, size);
             bookRepository.findByCategory(category.getId(), pageable);

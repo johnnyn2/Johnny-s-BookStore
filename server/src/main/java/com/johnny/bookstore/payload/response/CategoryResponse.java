@@ -1,10 +1,8 @@
 package com.johnny.bookstore.payload.response;
 
-import com.johnny.bookstore.model.CategoryName;
-
 public class CategoryResponse {
     private long id;
-    private CategoryName categoryName;
+    private String String;
 
     public long getId() {
         return id;
@@ -14,12 +12,12 @@ public class CategoryResponse {
         this.id = id;
     }
 
-    public CategoryName getCategoryName() {
-        return categoryName;
+    public String getString() {
+        return String;
     }
 
-    public void setCategoryName(CategoryName categoryName) {
-        this.categoryName = categoryName;
+    public void setString(String String) {
+        this.String = String;
     }
 
     
