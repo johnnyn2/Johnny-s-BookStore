@@ -53,9 +53,16 @@ public class BookResponse {
         this.authors = authors;
     }
 
-    public BookResponse(Long id, String title, String description) {
+    public BookResponse(Long id, String title, String description, List<String> categories, List<String> authors) {
         this.id = id;
         this.title = title;
         this.description = description;
-    }    
+        this.categories = categories;
+        this.authors = authors;
+    }
+
+    public BookResponse(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 }

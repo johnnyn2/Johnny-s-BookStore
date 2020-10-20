@@ -239,5 +239,30 @@ public class Book {
 
     public Book(Long id) {
         this.id = id;
-    }    
+    }
+
+    public Book(Long id, @NotNull Set<Category> categories, @NotBlank @Size(max = 1000) String title,
+            @NotBlank String description, @NotNull Set<Author> authors, @NotNull double price, @NotBlank String format,
+            @NotBlank String dimensions, @NotNull Date publicationDate, @NotBlank String publisher,
+            @NotBlank String publicanCountry, @NotBlank String language, @NotBlank String isbn10,
+            @NotBlank String isbn13, @NotNull float rank) {
+        this.id = id;
+        this.categories = categories;
+        this.title = title;
+        this.description = description;
+        this.authors = authors;
+        this.price = price;
+        this.format = format;
+        this.dimensions = dimensions;
+        this.publicationDate = publicationDate;
+        this.publisher = publisher;
+        this.publicanCountry = publicanCountry;
+        this.language = language;
+        this.isbn10 = isbn10;
+        this.isbn13 = isbn13;
+        this.rank = rank;
+    }
+
+    public Book() {
+    }
 }

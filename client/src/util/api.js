@@ -60,3 +60,18 @@ export const getCurrentUser = () => {
         method: 'GET'
     });
 }
+
+export const getAllCategories = () => {
+    return request({
+        url: API_BASE_URL + "/category/all",
+        method: 'GET'
+    });
+}
+
+export const getBooksByCategory = ({category, page, size}) => {
+    return request({
+        url: API_BASE_URL + "/books/getBooksByCategory",
+        method: 'GET',
+        body: JSON.stringify({category, page, size})
+    })
+}

@@ -1,14 +1,17 @@
 package com.johnny.bookstore.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.payload.request.AddBook;
+import com.johnny.bookstore.payload.request.GetBooksByCategory;
 import com.johnny.bookstore.payload.response.ApiResponse;
 import com.johnny.bookstore.payload.response.BookResponse;
 import com.johnny.bookstore.payload.response.PagedResponse;
+import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.service.BookService;
 import com.johnny.bookstore.util.AppConstants;
 
@@ -29,13 +32,9 @@ public class BookController {
     @Autowired
     private BookService bookService; 
 
-    @GetMapping("/{category}")
-    public PagedResponse<BookResponse> getBooksByCategory(
-        @PathVariable(value = "category") String category,
-        @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size 
-    ) {
-        return bookService.getBooksByCategory(category, page, size);
+    @GetMapping("/getBooksByCategory")
+    public PagedResponse<BookResponse> getBooksByCategory(@Valid @RequestBody GetBooksByCategory payload) {
+        return bookService.getBooksByCategory(payload.getCategoryId(), payload.getPage(), payload.getSize());
     }
 
     @PostMapping("/add")
@@ -46,5 +45,10 @@ public class BookController {
                         .fromCurrentRequest().path("/{bookId}")
                         .buildAndExpand(book.getId()).toUri();
         return ResponseEntity.created(location).body(new ApiResponse(true, "Book Added Successfully", book));
+    }
+
+    @GetMapping("/getAll")
+    public List<Book> getAll() {
+        return bookService.getAll();
     }
 }

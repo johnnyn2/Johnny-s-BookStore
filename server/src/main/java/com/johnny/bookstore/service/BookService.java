@@ -80,29 +80,35 @@ public class BookService {
         return null;
     }
 
-    public PagedResponse<BookResponse> getBooksByCategory(String categoryName, int page, int size) {
+    public PagedResponse<BookResponse> getBooksByCategory(Long categoryId, int page, int size) {
         try {
-            Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", null));
-
             Pageable pageable = PageRequest.of(page, size);
-            Page<BookResponse> books = bookRepository.findByCategory(category.getId(), pageable);
+            Page<Book> books = bookRepository.findByCategory(categoryId, pageable);
             if (books.getNumberOfElements() == 0) {
                 return new PagedResponse<>(Collections.emptyList(), books.getNumber(),
                     books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
             }
-            List<BookResponse> results = books.getContent();
-            for(BookResponse br: results) {
-                List<Category> categories = categoryRepository.findByBookId(br.getId());
-                List<String> categoryNames = categories.stream().map(Category::getName).collect(Collectors.toList());
-                br.setCategories(categoryNames);
-                List<Author> authors = authorRepository.findByBookId(br.getId());
-                List<String> authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
-                br.setAuthors(authorNames);
-            }
+            List<BookResponse> results = books.getContent().stream().map(book -> {
+                return new BookResponse(
+                    book.getId(),
+                    book.getTitle(),
+                    book.getDescription(),
+                    book.getCategories().stream().map(category -> {
+                        return category.getName();
+                    }).collect(Collectors.toList()),
+                    book.getAuthors().stream().map(author -> {
+                        return author.getName();
+                    }).collect(Collectors.toList())
+                );
+            }).collect(Collectors.toList());
             return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new PagedResponse<BookResponse>();
+    }
+
+    public List<Book> getAll() {
+        return bookRepository.getAll();
     }
 }

@@ -19,10 +19,10 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public ApiResponse getAllCategories() {
         try {
-            List<Category> categories = categoryRepository.findAll();
+            List<String> categories = categoryRepository.findAllCategoryNames();
             return new ApiResponse(true, "", categories);       
         } catch (Exception e) {
             e.printStackTrace();

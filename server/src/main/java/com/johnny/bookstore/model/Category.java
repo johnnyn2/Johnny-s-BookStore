@@ -1,10 +1,15 @@
 package com.johnny.bookstore.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,11 +38,11 @@ public class Category {
         this.name = name;
     }
 
+    public Category() {
+    }
+
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public Category() {
     }
 }
