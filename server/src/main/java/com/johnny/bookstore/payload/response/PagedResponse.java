@@ -3,11 +3,26 @@ package com.johnny.bookstore.payload.response;
 import java.util.List;
 
 public class PagedResponse<T> {
+
     private List<T> content;
     private int page;
-    private Long totalElements;
-    private int totlaPages;
+    private int size;
+    private long totalElements;
+    private int totalPages;
     private boolean last;
+
+    public PagedResponse() {
+
+    }
+
+    public PagedResponse(List<T> content, int page, int size, long totalElements, int totalPages, boolean last) {
+        this.content = content;
+        this.page = page;
+        this.size = size;
+        this.totalElements = totalElements;
+        this.totalPages = totalPages;
+        this.last = last;
+    }
 
     public List<T> getContent() {
         return content;
@@ -25,20 +40,28 @@ public class PagedResponse<T> {
         this.page = page;
     }
 
-    public Long getTotalElements() {
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public long getTotalElements() {
         return totalElements;
     }
 
-    public void setTotalElements(Long totalElements) {
+    public void setTotalElements(long totalElements) {
         this.totalElements = totalElements;
     }
 
-    public int getTotlaPages() {
-        return totlaPages;
+    public int getTotalPages() {
+        return totalPages;
     }
 
-    public void setTotlaPages(int totlaPages) {
-        this.totlaPages = totlaPages;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 
     public boolean isLast() {
@@ -48,17 +71,4 @@ public class PagedResponse<T> {
     public void setLast(boolean last) {
         this.last = last;
     }
-
-    public PagedResponse() {
-    }
-
-    public PagedResponse(List<T> content, int page, Long totalElements, int totlaPages, boolean last) {
-        this.content = content;
-        this.page = page;
-        this.totalElements = totalElements;
-        this.totlaPages = totlaPages;
-        this.last = last;
-    }
-
-    
 }

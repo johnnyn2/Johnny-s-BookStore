@@ -17,6 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findById(Long bookId);
 
-    @Query("SELECT NEW com.johnny.bookstore.payload.response.BookResponse(b.id, b.title, b.description, b.categories, b.authors) FROM Book b WHERE :categoryId in b.categories")
-    Page<Long> findByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+    @Query("SELECT NEW com.johnny.bookstore.payload.response.BookResponse(b.id, b.title, b.description) FROM Book b JOIN b.categories c WHERE c.id = :categoryId GROUP BY b.id")
+    Page<BookResponse> findByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
 }

@@ -236,4 +236,8 @@ public class Book {
         this.isbn13 = isbn13;
         this.rank = rank;
     }
+
+    public Book(Long id) {
+        this.id = id;
+    }    
 }

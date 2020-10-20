@@ -10,8 +10,8 @@ public class BookResponse {
     private Long id;
     private String title;
     private String description;
-    private Set<Category> categories;
-    private Set<Author> authors;
+    private List<String> categories;
+    private List<String> authors;
 
     public Long getId() {
         return id;
@@ -37,27 +37,25 @@ public class BookResponse {
         this.description = description;
     }
 
-    public Set<Category> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
-    public Set<Author> getAuthors() {
+    public List<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void setAuthors(List<String> authors) {
         this.authors = authors;
     }
 
-    public BookResponse(Long id, String title, String description, Set<Category> categories, Set<Author> authors) {
+    public BookResponse(Long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.categories = categories;
-        this.authors = authors;
-    }
+    }    
 }

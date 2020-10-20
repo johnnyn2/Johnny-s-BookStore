@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.johnny.bookstore.exception.ResourceNotFoundException;
 import com.johnny.bookstore.model.Author;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -83,7 +85,21 @@ public class BookService {
             Category category = categoryRepository.findByName(categoryName).orElseThrow(() -> new ResourceNotFoundException("Book Category", "category", null));
 
             Pageable pageable = PageRequest.of(page, size);
-            bookRepository.findByCategory(category.getId(), pageable);
+            Page<BookResponse> books = bookRepository.findByCategory(category.getId(), pageable);
+            if (books.getNumberOfElements() == 0) {
+                return new PagedResponse<>(Collections.emptyList(), books.getNumber(),
+                    books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
+            }
+            List<BookResponse> results = books.getContent();
+            for(BookResponse br: results) {
+                List<Category> categories = categoryRepository.findByBookId(br.getId());
+                List<String> categoryNames = categories.stream().map(Category::getName).collect(Collectors.toList());
+                br.setCategories(categoryNames);
+                List<Author> authors = authorRepository.findByBookId(br.getId());
+                List<String> authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
+                br.setAuthors(authorNames);
+            }
+            return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
         } catch (Exception e) {
             e.printStackTrace();
         }
