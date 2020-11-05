@@ -22,7 +22,7 @@ public class CategoryController {
     @GetMapping("/all")
     public ApiResponse getAllCategories() {
         try {
-            List<String> categories = categoryRepository.findAllCategoryNames();
+            List<Category> categories = categoryRepository.findAllCategoryNames();
             return new ApiResponse(true, "", categories);       
         } catch (Exception e) {
             e.printStackTrace();

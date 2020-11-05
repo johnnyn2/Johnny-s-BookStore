@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.payload.request.AddBook;
+import com.johnny.bookstore.payload.request.GetAllBooks;
 import com.johnny.bookstore.payload.request.GetBooksByCategory;
 import com.johnny.bookstore.payload.response.ApiResponse;
 import com.johnny.bookstore.payload.response.BookResponse;
@@ -32,9 +33,14 @@ public class BookController {
     @Autowired
     private BookService bookService; 
 
-    @GetMapping("/getBooksByCategory")
-    public PagedResponse<BookResponse> getBooksByCategory(@Valid @RequestBody GetBooksByCategory payload) {
-        return bookService.getBooksByCategory(payload.getCategoryId(), payload.getPage(), payload.getSize());
+    @PostMapping("/getBooksByCategory")
+    public PagedResponse<BookResponse> getBooksByCategory(@Valid @RequestBody GetBooksByCategory body) {
+        return bookService.getBooksByCategory(body.getCategoryId(), body.getPage(), body.getSize());
+    }
+
+    @PostMapping("/getAllBooks")
+    public PagedResponse<BookResponse> getAllBooks(@Valid @RequestBody GetAllBooks body) {
+        return bookService.getAllBooks(body.getPage(), body.getSize());
     }
 
     @PostMapping("/add")

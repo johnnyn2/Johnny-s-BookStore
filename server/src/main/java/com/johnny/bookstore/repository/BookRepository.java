@@ -21,6 +21,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
     Page<Book> findByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
 
+    @Query("SELECT b FROM Book b")
+    Page<Book> getAllBooks(Pageable pageable);
+
     @Query("SELECT NEW com.johnny.bookstore.payload.response.BookResponse(b.id, b.title) FROM Book b")
     Page<BookResponse> getBookBriefInfo(Pageable pageable);
 

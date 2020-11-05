@@ -68,10 +68,18 @@ export const getAllCategories = () => {
     });
 }
 
-export const getBooksByCategory = ({category, page, size}) => {
+export const getBooksByCategory = ({categoryId, page, size}) => {
     return request({
         url: API_BASE_URL + "/books/getBooksByCategory",
-        method: 'GET',
-        body: JSON.stringify({category, page, size})
+        method: 'POST',
+        body: JSON.stringify({categoryId, page, size})
+    })
+}
+
+export const getAllBooks = ({page, size}) => {
+    return request({
+        url: API_BASE_URL + "/books/getAllBooks",
+        method: 'POST',
+        body: JSON.stringify({page, size})
     })
 }
