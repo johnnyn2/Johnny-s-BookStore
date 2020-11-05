@@ -6,7 +6,7 @@ export const Store = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
     return (
         <React.Fragment>
-            <div style={{display: 'flex', flex: 1, margin: '20px'}}>
+            <div style={{display: 'flex', flex: 1, height: 'calc(100% - 64px - 20px)', margin: '20px'}}>
                 <Tools
                     selectedCategoryId={selectedCategoryId}
                     setSelectedCategoryId={setSelectedCategoryId}

@@ -78,7 +78,7 @@ function App(props) {
     }
   }, [])
   return (
-    <div style={{width: '100%', height: '100%'}}>
+    <div style={{width: '100%', height: 'calc(100% - 64px)'}}>
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div style={{width: '100%', height: '100%'}}>
         <Switch>

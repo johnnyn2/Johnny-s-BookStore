@@ -22,7 +22,7 @@ export const Books = ({categoryId}) => {
         if (categoryId === -1) {
             getAllBooks({page: 0, size: 10})
             .then(res => {
-                console.log('Get all books: ', res);
+                setCurrentPage(1);
                 setBooks(res.content);
             }).catch(err => {
                 console.log(err);
@@ -30,7 +30,7 @@ export const Books = ({categoryId}) => {
         } else {
             getBooksByCategory({categoryId, page: 0, size: 10})
             .then(res => {
-                console.log(res);
+                setCurrentPage(1);
                 setBooks(res.content);
             }).catch(err => {
                 console.log(err);
@@ -39,8 +39,8 @@ export const Books = ({categoryId}) => {
     }, [categoryId])
 
     return (
-        <Card style={{display: 'flex', width: '100%'}}>
-            
+        <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+            <div style={{display: 'flex', flex: 1}}></div>
             <Pagination count={10} color="primary" />
         </Card>
         
