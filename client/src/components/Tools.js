@@ -6,16 +6,24 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import TextField from '@material-ui/core/TextField';
 import { getAllCategories } from '../util/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
+        marginRight: '20px',
+        width: '300px',
+        '& > *': {
+            marginTop: '10px'
+        }
     },
 }));
 
 export const Tools = ({
-    setSelectedCategoryId
+    setSelectedCategoryId,
+    setBookName,
+    setAuthorName,
 }) => {
     const classes = useStyles();
     const [category, setCategory] = useState({id: -1, name: 'All'});
@@ -49,16 +57,15 @@ export const Tools = ({
 
     return (
         <div className={classes.root}>
-            <List component="nav" aria-label="Book Categories">
+            <List component="nav" aria-label="Book Categories" style={{width: 280}}>
                 <ListItem
                     button
                     aria-haspopup="true"
                     aria-controls="category-menu"
                     aria-label="Category"
                     onClick={handleClickListItem}
-                    style={{ width: 300 }}
                 >
-                    <ListItemText primary="Category" secondary={categories.length > 0 ? categories[selectedCategoryIndex].name : ''} />
+                    <ListItemText style={{wordBreak: 'break-word'}} primary="Category" secondary={categories.length > 0 ? categories[selectedCategoryIndex].name : ''} />
                 </ListItem>
             </List>
             <Menu
@@ -82,10 +89,26 @@ export const Tools = ({
                     </MenuItem>
                 ))}
             </Menu>
+            <TextField
+                id="bookNameInput"
+                label="Book Name"
+                variant="outlined"
+                style={{ width: 280 }}
+                onInput={(e) => setBookName(e.target.value)}
+            />
+            <TextField
+                id="authorNameInput"
+                label="Author Name"
+                variant="outlined"
+                style={{ width: 280 }}
+                onInput={(e) => setAuthorName(e.target.value)}
+            />
         </div>
     );
 }
 
 Tools.propTypes = {
     setSelectedCategoryId: PropTypes.func.isRequired,
+    setBookName: PropTypes.func.isRequired,
+    setAuthorName: PropTypes.func.isRequired,
 }

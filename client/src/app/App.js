@@ -78,9 +78,9 @@ function App(props) {
     }
   }, [])
   return (
-    <div style={{width: '100%', height: 'calc(100% - 64px)'}}>
+    <div style={{width: '100%', height: '100%'}}>
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
-      <div style={{width: '100%', height: '100%'}}>
+      <div style={{width: '100%', height: 'calc(100% - 64px)', display: 'flex'}}>
         <Switch>
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>

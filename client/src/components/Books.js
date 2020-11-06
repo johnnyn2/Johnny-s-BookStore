@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Books = ({categoryId}) => {
+export const Books = ({categoryId, bookName, authorName}) => {
     const classes = useStyles();
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        if (categoryId === -1) {
+        if (categoryId === -1 && bookName === '' && authorName === '') {
             getAllBooks({page: 0, size: 10})
             .then(res => {
                 setCurrentPage(1);
@@ -41,7 +41,9 @@ export const Books = ({categoryId}) => {
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             <div style={{display: 'flex', flex: 1}}></div>
-            <Pagination count={10} color="primary" />
+            <div style={{display: 'flex', height: '50px', margin: '20px', justifyContent: 'center', alignItems: 'center'}}>
+                <Pagination count={10} color="primary" />
+            </div>
         </Card>
         
     );
@@ -49,6 +51,8 @@ export const Books = ({categoryId}) => {
 
 Books.propTypes = {
     categoryId: PropTypes.number.isRequired,
+    bookName: PropTypes.string.isRequired,
+    authorName: PropTypes.string.isRequired
 }
 
 export default Books;

@@ -83,3 +83,11 @@ export const getAllBooks = ({page, size}) => {
         body: JSON.stringify({page, size})
     })
 }
+
+export const searchBooksByFilter = ({categoryId, bookName, authorName, page, size}) => {
+    return request({
+        url: API_BASE_URL + '/books/searchBooksByFilter',
+        method: 'POST',
+        body: JSON.stringify({categoryId, bookName, authorName, page, size})
+    })
+}

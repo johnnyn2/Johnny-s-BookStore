@@ -9,6 +9,7 @@ import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.payload.request.AddBook;
 import com.johnny.bookstore.payload.request.GetAllBooks;
 import com.johnny.bookstore.payload.request.GetBooksByCategory;
+import com.johnny.bookstore.payload.request.SearchBooksByFilter;
 import com.johnny.bookstore.payload.response.ApiResponse;
 import com.johnny.bookstore.payload.response.BookResponse;
 import com.johnny.bookstore.payload.response.PagedResponse;
@@ -41,6 +42,11 @@ public class BookController {
     @PostMapping("/getAllBooks")
     public PagedResponse<BookResponse> getAllBooks(@Valid @RequestBody GetAllBooks body) {
         return bookService.getAllBooks(body.getPage(), body.getSize());
+    }
+
+    @PostMapping("/searchBooksByFilter")
+    public PagedResponse<BookResponse> searchBooksByFilter(@Valid @RequestBody SearchBooksByFilter body) {
+        return bookService.searchBooksByFilter(body.getBookName(), body.getAuthorName(), body.getCategoryId(), body.getPage(), body.getSize());
     }
 
     @PostMapping("/add")

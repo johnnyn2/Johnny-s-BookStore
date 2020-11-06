@@ -108,6 +108,10 @@ public class BookService {
         return new PagedResponse<BookResponse>();
     }
 
+    public PagedResponse<BookResponse> searchBooksByFilter(String bookName, String authorName, Long categoryId, int page, int size) {
+        return new PagedResponse<BookResponse>();
+    }
+
     public PagedResponse<BookResponse> getAllBooks(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
