@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { getAllCategories } from '../util/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,8 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 export const Tools = ({
     setSelectedCategoryId,
-    setBookName,
+    setTitle,
     setAuthorName,
+    handleSearch,
 }) => {
     const classes = useStyles();
     const [category, setCategory] = useState({id: -1, name: 'All'});
@@ -94,7 +96,7 @@ export const Tools = ({
                 label="Book Name"
                 variant="outlined"
                 style={{ width: 280 }}
-                onInput={(e) => setBookName(e.target.value)}
+                onInput={(e) => setTitle(e.target.value)}
             />
             <TextField
                 id="authorNameInput"
@@ -103,12 +105,16 @@ export const Tools = ({
                 style={{ width: 280 }}
                 onInput={(e) => setAuthorName(e.target.value)}
             />
+            <Button variant="contained" color="secondary" onClick={e => handleSearch(e)}>
+                Search
+            </Button>
         </div>
     );
 }
 
 Tools.propTypes = {
     setSelectedCategoryId: PropTypes.func.isRequired,
-    setBookName: PropTypes.func.isRequired,
+    setTitle: PropTypes.func.isRequired,
     setAuthorName: PropTypes.func.isRequired,
+    handleSearch: PropTypes.func.isRequired,
 }

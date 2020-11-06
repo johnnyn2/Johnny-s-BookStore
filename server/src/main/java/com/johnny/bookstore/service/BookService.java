@@ -109,6 +109,26 @@ public class BookService {
     }
 
     public PagedResponse<BookResponse> searchBooksByFilter(String bookName, String authorName, Long categoryId, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Book> books = bookRepository.searchBooksByFilter(bookName, authorName, categoryId, pageable);
+            if (books.getNumberOfElements() == 0) {
+                return new PagedResponse<>(Collections.emptyList(), books.getNumber(), books.getSize(),
+                        books.getTotalElements(), books.getTotalPages(), books.isLast());
+            }
+            List<BookResponse> results = books.getContent().stream().map(book -> {
+                return new BookResponse(book.getId(), book.getTitle(), book.getDescription(),
+                        book.getCategories().stream().map(category -> {
+                            return category.getName();
+                        }).collect(Collectors.toList()), book.getAuthors().stream().map(author -> {
+                            return author.getName();
+                        }).collect(Collectors.toList()));
+            }).collect(Collectors.toList());
+            return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(),
+                    books.getTotalPages(), books.isLast());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new PagedResponse<BookResponse>();
     }
 

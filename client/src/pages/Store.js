@@ -4,22 +4,21 @@ import {Books} from '../components/Books';
 
 export const Store = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
-    const [bookName, setBookName] = useState('');
+    const [title, setTitle] = useState('');
     const [authorName, setAuthorName] = useState('');
+    const [search, setSearch] = useState();
     return (
         <React.Fragment>
             <div style={{display: 'flex', padding: '20px', flex: 1}}>
                 <Tools
-                    selectedCategoryId={selectedCategoryId}
                     setSelectedCategoryId={setSelectedCategoryId}
-                    bookName={bookName}
-                    authorName={authorName}
-                    setBookName={setBookName}
+                    setTitle={setTitle}
                     setAuthorName={setAuthorName}
+                    handleSearch={() => {}}
                 />
                 <Books
                     categoryId={selectedCategoryId}
-                    bookName={bookName}
+                    title={title}
                     authorName={authorName}
                 />
             </div>

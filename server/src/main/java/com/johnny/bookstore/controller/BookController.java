@@ -46,7 +46,7 @@ public class BookController {
 
     @PostMapping("/searchBooksByFilter")
     public PagedResponse<BookResponse> searchBooksByFilter(@Valid @RequestBody SearchBooksByFilter body) {
-        return bookService.searchBooksByFilter(body.getBookName(), body.getAuthorName(), body.getCategoryId(), body.getPage(), body.getSize());
+        return bookService.searchBooksByFilter(body.getTitle(), body.getAuthorName(), body.getCategoryId(), body.getPage(), body.getSize());
     }
 
     @PostMapping("/add")

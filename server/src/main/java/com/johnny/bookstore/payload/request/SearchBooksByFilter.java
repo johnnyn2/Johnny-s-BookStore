@@ -1,19 +1,11 @@
 package com.johnny.bookstore.payload.request;
 
 public class SearchBooksByFilter {
-    private String bookName;
+    private String title;
     private String authorName;
     private Long categoryId;
     private int page;
     private int size;
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
 
     public String getAuthorName() {
         return authorName;
@@ -45,6 +37,14 @@ public class SearchBooksByFilter {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
     
 }

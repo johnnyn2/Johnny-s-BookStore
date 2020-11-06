@@ -15,7 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, DynamicBookRepository {
     Optional<Book> findById(Long bookId);
 
     @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")

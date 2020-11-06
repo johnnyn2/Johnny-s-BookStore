@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import Card from '@material-ui/core/Card';
-import {getAllBooks, getBooksByCategory} from '../util/api';
+import {getAllBooks, searchBooksByFilter} from '../util/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,13 +13,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Books = ({categoryId, bookName, authorName}) => {
+export const Books = ({categoryId, title, authorName}) => {
     const classes = useStyles();
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const handleSearch = () => {
+        searchBooksByFilter({categoryId, title, authorName, page: 0, size: 10})
+        .then(res => {
+            console.log(res);
+            setCurrentPage(1);
+            setBooks(res.content);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     useEffect(() => {
-        if (categoryId === -1 && bookName === '' && authorName === '') {
             getAllBooks({page: 0, size: 10})
             .then(res => {
                 setCurrentPage(1);
@@ -27,16 +37,7 @@ export const Books = ({categoryId, bookName, authorName}) => {
             }).catch(err => {
                 console.log(err);
             })
-        } else {
-            getBooksByCategory({categoryId, page: 0, size: 10})
-            .then(res => {
-                setCurrentPage(1);
-                setBooks(res.content);
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-    }, [categoryId])
+    }, [])
 
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
@@ -51,7 +52,7 @@ export const Books = ({categoryId, bookName, authorName}) => {
 
 Books.propTypes = {
     categoryId: PropTypes.number.isRequired,
-    bookName: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     authorName: PropTypes.string.isRequired
 }
 
