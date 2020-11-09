@@ -1,26 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import {Tools} from '../components/Tools';
 import {Books} from '../components/Books';
+import {searchBooksByFilter} from '../util/api';
 
 export const Store = () => {
-    const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
-    const [title, setTitle] = useState('');
-    const [authorName, setAuthorName] = useState('');
-    const [search, setSearch] = useState();
+    const [data, setData] = useState({
+        content: [],
+        last: true,
+        page: 0,
+        size: 0,
+        totalElements: 0,
+        totalPages: 0
+    });
     return (
         <React.Fragment>
             <div style={{display: 'flex', padding: '20px', flex: 1}}>
-                <Tools
-                    setSelectedCategoryId={setSelectedCategoryId}
-                    setTitle={setTitle}
-                    setAuthorName={setAuthorName}
-                    handleSearch={() => {}}
-                />
-                <Books
-                    categoryId={selectedCategoryId}
-                    title={title}
-                    authorName={authorName}
-                />
+                <Tools setData={setData} />
+                <Books data={data} />
             </div>
         </React.Fragment>
     );

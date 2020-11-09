@@ -13,37 +13,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Books = ({categoryId, title, authorName}) => {
+export const Books = ({data}) => {
     const classes = useStyles();
-    const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const handleSearch = () => {
-        searchBooksByFilter({categoryId, title, authorName, page: 0, size: 10})
-        .then(res => {
-            console.log(res);
-            setCurrentPage(1);
-            setBooks(res.content);
-        }).catch(err => {
-            console.log(err);
-        })
-    }
-
-    useEffect(() => {
-            getAllBooks({page: 0, size: 10})
-            .then(res => {
-                setCurrentPage(1);
-                setBooks(res.content);
-            }).catch(err => {
-                console.log(err);
-            })
-    }, [])
 
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             <div style={{display: 'flex', flex: 1}}></div>
             <div style={{display: 'flex', height: '50px', margin: '20px', justifyContent: 'center', alignItems: 'center'}}>
-                <Pagination count={10} color="primary" />
+                <Pagination
+                    count={data.content.length > 0 ? Math.ceil(data.content.length / 10.0) : 0}
+                    color="primary"
+                    page={currentPage}
+                    onChange={(event, value) => { setCurrentPage(value); }}
+                />
             </div>
         </Card>
         
@@ -51,9 +34,14 @@ export const Books = ({categoryId, title, authorName}) => {
 }
 
 Books.propTypes = {
-    categoryId: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    authorName: PropTypes.string.isRequired
+    data: PropTypes.shape({
+        content: PropTypes.arrayOf(PropTypes.object).isRequired,
+        last: PropTypes.bool.isRequired,
+        page: PropTypes.number.isRequired,
+        size: PropTypes.number.isRequired,
+        totalElements: PropTypes.number.isRequired,
+        totalPages: PropTypes.number.isRequired,
+    }).isRequired,
 }
 
 export default Books;

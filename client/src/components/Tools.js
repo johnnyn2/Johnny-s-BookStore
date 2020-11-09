@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { getAllCategories } from '../util/api';
+import { getAllCategories, searchBooksByFilter } from '../util/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,41 +21,77 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Tools = ({
-    setSelectedCategoryId,
-    setTitle,
-    setAuthorName,
-    handleSearch,
-}) => {
+export const Tools = ({setData}) => {
     const classes = useStyles();
-    const [category, setCategory] = useState({id: -1, name: 'All'});
-    const [categories, setCategories] = useState([]);
-    const [categoryMenuAnchor, setCategoryMenuAnchor] = useState(null);
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
+
+    const initState = {
+        selectedCategoryId: -1,
+        title: '',
+        authorName: '',
+        category: {id: -1, name: 'All'},
+        categories: [],
+        categoryMenuAnchor: null,
+        selectedCategoryIndex: 0
+    };
+
+    const [state, setState] = useState(initState);
 
     useEffect(() => {
+        handleSearch();
+    }, [])
+
+    const handleSearch = (e) => {
+        const {selectedCategoryId, title, authorName} = state;
+        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 10 })
+        .then(data => {
+            console.log('data: ', data);
+            setData(data);
+        }).catch(err => console.log(err));
+    }
+
+    const handleReset = (e) => {
+        setState(initState, () => {
+            handleSearch(e);
+        })
+    }
+
+    useEffect(() => {
+        const {category} = state;
         getAllCategories().then(res => {
             const catMenu = [category, ...res.payload];
-            setCategories(catMenu);
+            setState(prevState => ({...prevState, categories: catMenu}));
         }).catch(err => {
             console.log(err);
         })
     }, [])
 
     const handleClickListItem = (event) => {
-        setCategoryMenuAnchor(event.currentTarget);
+        setState(prevState => ({...prevState, categoryMenuAnchor: event.currentTarget}));
     };
 
     const handleMenuItemClick = (event, index) => {
-        setSelectedCategoryId(categories[index].id);
-        setSelectedCategoryIndex(index);
-        setCategoryMenuAnchor(null);
+        const {categories} = state;
+        setState(prevState => ({
+            ...prevState,
+            selectedCategoryId: categories[index].id,
+            selectedCategoryIndex: index,
+            categoryMenuAnchor: null,
+        }))
     };
 
     const handleClose = () => {
-        setCategoryMenuAnchor(null);
+        setState(prevState => ({...prevState, categoryMenuAnchor: null}));
     };
 
+    const handleInputText = (e) => {
+        e.persist();
+        setState(prevState => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }))
+    }
+
+    const {categories, selectedCategoryIndex, categoryMenuAnchor, title, authorName} = state;
 
     return (
         <div className={classes.root}>
@@ -96,25 +132,31 @@ export const Tools = ({
                 label="Book Name"
                 variant="outlined"
                 style={{ width: 280 }}
-                onInput={(e) => setTitle(e.target.value)}
+                name="title"
+                onInput={e => handleInputText(e)}
+                value={title}
             />
             <TextField
                 id="authorNameInput"
                 label="Author Name"
                 variant="outlined"
                 style={{ width: 280 }}
-                onInput={(e) => setAuthorName(e.target.value)}
+                name="authorName"
+                onInput={e => handleInputText(e)}
+                value={authorName}
             />
             <Button variant="contained" color="secondary" onClick={e => handleSearch(e)}>
                 Search
+            </Button>
+            <Button variant="contained" color="default" onClick={e => {
+                handleReset(e)
+            }}>
+                Reset
             </Button>
         </div>
     );
 }
 
 Tools.propTypes = {
-    setSelectedCategoryId: PropTypes.func.isRequired,
-    setTitle: PropTypes.func.isRequired,
-    setAuthorName: PropTypes.func.isRequired,
-    handleSearch: PropTypes.func.isRequired,
+    setData: PropTypes.func.isRequired
 }
