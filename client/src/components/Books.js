@@ -6,6 +6,7 @@ import Card from '@material-ui/core/Card';
 import {getAllBooks, searchBooksByFilter} from '../util/api';
 import {BookRow} from '../components/BookRow';
 import {BookCard} from '../components/BookCard';
+import {BookGallery} from '../components/BookGallery';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,14 +29,10 @@ export const Books = ({data}) => {
         bookRows = [...bookRows, data.content.slice(start, end)];
     }
 
-    console.log('bookRows: ', bookRows);
-
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             {data.content.length > 0 ?
-                <div style={{display: 'flex', flexDirection: 'column', flex: 1, overflow: 'auto', alignItems: 'center', justifyContent: 'space-between'}}>
-                    {bookRows.map((row, index) => <BookRow key={index} books={row}/>)}
-                </div>
+                <BookGallery bookRows={bookRows} />
             :
                 <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     No results found
