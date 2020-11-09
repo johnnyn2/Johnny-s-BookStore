@@ -19,6 +19,21 @@ const useStyles = makeStyles((theme) => ({
             marginTop: '10px'
         }
     },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        maxWidth: '100%',
+        margin: '0 auto',
+        padding: '10px 0',
+    },
+    flexContainer: {
+        display: 'flex',
+        flex: 1
+    },
+    flexButton: {
+        display: 'flex',
+        flex: 1,
+    }
 }));
 
 export const Tools = ({setData}) => {
@@ -37,25 +52,7 @@ export const Tools = ({setData}) => {
     const [state, setState] = useState(initState);
 
     useEffect(() => {
-        handleSearch();
-    }, [])
-
-    const handleSearch = (e) => {
-        const {selectedCategoryId, title, authorName} = state;
-        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 10 })
-        .then(data => {
-            console.log('data: ', data);
-            setData(data);
-        }).catch(err => console.log(err));
-    }
-
-    const handleReset = (e) => {
-        setState(initState, () => {
-            handleSearch(e);
-        })
-    }
-
-    useEffect(() => {
+        handleSearch(null, state);
         const {category} = state;
         getAllCategories().then(res => {
             const catMenu = [category, ...res.payload];
@@ -65,6 +62,25 @@ export const Tools = ({setData}) => {
         })
     }, [])
 
+    const handleSearch = (e, options) => {
+        const {selectedCategoryId, title, authorName} = options;
+        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 10 })
+        .then(data => {
+            console.log('data: ', data);
+            setData(data);
+        }).catch(err => console.log(err));
+    }
+
+    const handleReset = (e) => {
+        setState(prevState => {
+            handleSearch(e, initState);
+            return {
+                ...initState,
+                categories: prevState.categories,
+            };
+        });
+    }
+    
     const handleClickListItem = (event) => {
         setState(prevState => ({...prevState, categoryMenuAnchor: event.currentTarget}));
     };
@@ -91,7 +107,7 @@ export const Tools = ({setData}) => {
         }))
     }
 
-    const {categories, selectedCategoryIndex, categoryMenuAnchor, title, authorName} = state;
+    const {categories, selectedCategoryIndex, categoryMenuAnchor, title, authorName, selectedCategoryId} = state;
 
     return (
         <div className={classes.root}>
@@ -145,14 +161,20 @@ export const Tools = ({setData}) => {
                 onInput={e => handleInputText(e)}
                 value={authorName}
             />
-            <Button variant="contained" color="secondary" onClick={e => handleSearch(e)}>
-                Search
-            </Button>
-            <Button variant="contained" color="default" onClick={e => {
-                handleReset(e)
-            }}>
-                Reset
-            </Button>
+            <div className={classes.buttonContainer}>
+                <div className={classes.flexContainer} style={{marginRight: 10}}>
+                    <Button className={classes.flexButton} variant="contained" color="secondary" onClick={e => handleSearch(e, state)}>
+                        Search
+                    </Button>
+                </div>
+                <div className={classes.flexContainer}>
+                    <Button className={classes.flexButton} variant="contained" color="default" onClick={e => {
+                        handleReset(e)
+                    }}>
+                        Reset
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 }
