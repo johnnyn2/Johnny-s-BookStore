@@ -1,5 +1,13 @@
 package com.johnny.bookstore.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.johnny.bookstore.exception.ResourceNotFoundException;
+import javax.imageio.ImageIO;
+
 import com.johnny.bookstore.model.Author;
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.model.Category;
@@ -22,12 +31,15 @@ import com.johnny.bookstore.repository.AuthorRepository;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.CategoryRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 @Service
 public class BookService {
@@ -38,22 +50,25 @@ public class BookService {
     @Autowired
     AuthorRepository authorRepository;
 
+    private final String BOOK_GALLERY_COVER = "C:/Users/johnnyho/Documents/spring-react-app/images";
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public Book addBook(AddBook addBook) {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Book book;
         try {
-            book = new Book(addBook.getTitle(), addBook.getDescription(), addBook.getPrice(),
-                addBook.getFormat(), addBook.getDimensions(), format.parse(addBook.getPublicationDate()),
-                addBook.getPublisher(), addBook.getPublicanCountry(), addBook.getLanguage(), addBook.getIsbn10(),
-                addBook.getIsbn13(), addBook.getRank());
+            book = new Book(addBook.getTitle(), addBook.getDescription(), addBook.getPrice(), addBook.getFormat(),
+                    addBook.getDimensions(), format.parse(addBook.getPublicationDate()), addBook.getPublisher(),
+                    addBook.getPublicanCountry(), addBook.getLanguage(), addBook.getIsbn10(), addBook.getIsbn13(),
+                    addBook.getRank());
             Set<Author> authors = new HashSet<>();
-            for (String authorStr: addBook.getAuthors()) {
+            for (String authorStr : addBook.getAuthors()) {
                 Author author = null;
                 if (!authorRepository.findByName(authorStr).isPresent()) {
                     Author newAuthor = new Author();
                     newAuthor.setName(authorStr);
                     newAuthor.setProfile("");
-                    author = authorRepository.save(newAuthor); 
+                    author = authorRepository.save(newAuthor);
                 } else {
                     author = authorRepository.findByName(authorStr).get();
                 }
@@ -61,7 +76,7 @@ public class BookService {
             }
             book.setAuthors(authors);
             Set<Category> categories = new HashSet<>();
-            for (String categoryStr: addBook.getCategories()) {
+            for (String categoryStr : addBook.getCategories()) {
                 Category category = null;
                 if (!categoryRepository.findByName(categoryStr).isPresent()) {
                     Category newCategory = new Category();
@@ -85,34 +100,6 @@ public class BookService {
             Pageable pageable = PageRequest.of(page, size);
             Page<Book> books = bookRepository.findByCategory(categoryId, pageable);
             if (books.getNumberOfElements() == 0) {
-                return new PagedResponse<>(Collections.emptyList(), books.getNumber(),
-                    books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
-            }
-            List<BookResponse> results = books.getContent().stream().map(book -> {
-                return new BookResponse(
-                    book.getId(),
-                    book.getTitle(),
-                    book.getDescription(),
-                    book.getCategories().stream().map(category -> {
-                        return category.getName();
-                    }).collect(Collectors.toList()),
-                    book.getAuthors().stream().map(author -> {
-                        return author.getName();
-                    }).collect(Collectors.toList())
-                );
-            }).collect(Collectors.toList());
-            return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(), books.isLast());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new PagedResponse<BookResponse>();
-    }
-
-    public PagedResponse<BookResponse> searchBooksByFilter(String bookName, String authorName, Long categoryId, int page, int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Book> books = bookRepository.searchBooksByFilter(bookName, authorName, categoryId, pageable);
-            if (books.getNumberOfElements() == 0) {
                 return new PagedResponse<>(Collections.emptyList(), books.getNumber(), books.getSize(),
                         books.getTotalElements(), books.getTotalPages(), books.isLast());
             }
@@ -123,6 +110,43 @@ public class BookService {
                         }).collect(Collectors.toList()), book.getAuthors().stream().map(author -> {
                             return author.getName();
                         }).collect(Collectors.toList()));
+            }).collect(Collectors.toList());
+            return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(),
+                    books.getTotalPages(), books.isLast());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new PagedResponse<BookResponse>();
+    }
+
+    public PagedResponse<BookResponse> searchBooksByFilter(String bookName, String authorName, Long categoryId,
+            int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Book> books = bookRepository.searchBooksByFilter(bookName, authorName, categoryId, pageable);
+            if (books.getNumberOfElements() == 0) {
+                return new PagedResponse<>(Collections.emptyList(), books.getNumber(), books.getSize(),
+                        books.getTotalElements(), books.getTotalPages(), books.isLast());
+            }
+            List<BookResponse> results = books.getContent().stream().map(book -> {
+                logger.info("image path: " + BOOK_GALLERY_COVER + "/" + book.getId().toString() + "/gallery_cover.jpg");
+                BookResponse res =  new BookResponse(book.getId(), book.getTitle(), book.getDescription(),
+                book.getCategories().stream().map(category -> {
+                    return category.getName();
+                }).collect(Collectors.toList()), book.getAuthors().stream().map(author -> {
+                    return author.getName();
+                }).collect(Collectors.toList()));
+                try {
+                    Path path = Paths.get(BOOK_GALLERY_COVER + "/" + book.getId().toString() + "/gallery_cover.jpg");
+                    byte[] imageStream = Files.readAllBytes(path);
+                    res.setImageStream(imageStream);
+                    logger.info("image stream: " + Integer.toString(imageStream.length));
+                    return res;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.error("Read gallery cover error");
+                }
+                return res;
             }).collect(Collectors.toList());
             return new PagedResponse<>(results, books.getNumber(), books.getSize(), books.getTotalElements(),
                     books.getTotalPages(), books.isLast());

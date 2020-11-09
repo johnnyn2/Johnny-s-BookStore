@@ -12,9 +12,18 @@ public class BookResponse {
     private String description;
     private List<String> categories;
     private List<String> authors;
+    private byte[] imageStream;
 
     public Long getId() {
         return id;
+    }
+
+    public byte[] getImageStream() {
+        return imageStream;
+    }
+
+    public void setImageStream(byte[] imageStream) {
+        this.imageStream = imageStream;
     }
 
     public void setId(Long id) {
@@ -65,4 +74,6 @@ public class BookResponse {
         this.id = id;
         this.title = title;
     }
+
+    public BookResponse() {}
 }

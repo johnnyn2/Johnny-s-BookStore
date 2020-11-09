@@ -1,0 +1,22 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {BookCard} from '../components/BookCard';
+
+export const BookRow = ({books}) => {
+    return (
+        <div style={{display: 'flex'}}>
+            {books.map(book => <BookCard key={book.id} {...book}/>)}
+        </div>
+    )
+}
+
+BookRow.propTypes = {
+    books: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+        authors: PropTypes.arrayOf(PropTypes.string).isRequired,
+        imageStream: PropTypes.string.isRequired,
+    })).isRequired,
+}
