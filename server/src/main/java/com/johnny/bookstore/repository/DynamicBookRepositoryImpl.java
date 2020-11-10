@@ -52,11 +52,12 @@ public class DynamicBookRepositoryImpl implements DynamicBookRepository {
 
         query.distinct(true).select(books).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         Query typedQuery = entityManager.createQuery(query);
+        int totalSize= typedQuery.getResultList().size();
         typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
         typedQuery.setMaxResults(pageable.getPageSize());
   
         List<Book> results = typedQuery.getResultList();
-        Page<Book> bookPage = new PageImpl<Book>(results, pageable, results.size());
+        Page<Book> bookPage = new PageImpl<Book>(results, pageable, totalSize);
         return bookPage;
     }
     

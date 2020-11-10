@@ -7,6 +7,7 @@ import {getAllBooks, searchBooksByFilter} from '../util/api';
 import {BookRow} from '../components/BookRow';
 import {BookCard} from '../components/BookCard';
 import {BookGallery} from '../components/BookGallery';
+import {ITEMS_PER_ROW, ROWS_PER_PAGE} from '../constants/constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,23 +17,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ITEMS_PER_ROW = 3;
-
 export const Books = ({data, currentUser, setSnackBar}) => {
     const classes = useStyles();
     const [currentPage, setCurrentPage] = useState(1);
 
     let bookRows = [];
-    for(let i =0;i<Math.ceil(data.content.length / 3); i++) {
+    for(let i =0;i<Math.ceil(data.content.length / ITEMS_PER_ROW); i++) {
         let start = i * ITEMS_PER_ROW;
         let end = start + ITEMS_PER_ROW ;
         bookRows = [...bookRows, data.content.slice(start, end)];
     }
 
+    const pageStart = (currentPage - 1) * ROWS_PER_PAGE;
+    const pageEnd = pageStart + ROWS_PER_PAGE;
+    const paginatedRows = bookRows.slice(pageStart, pageEnd);
+
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             {data.content.length > 0 ?
-                <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
+                <BookGallery bookRows={paginatedRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
             :
                 <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     No results found
@@ -40,7 +43,7 @@ export const Books = ({data, currentUser, setSnackBar}) => {
             }
             <div style={{display: 'flex', height: '50px', margin: '20px', justifyContent: 'center', alignItems: 'center'}}>
                 <Pagination
-                    count={data.content.length > 0 ? Math.ceil(data.content.length / 10.0) : 0}
+                    count={data.totalPages}
                     color="primary"
                     page={currentPage}
                     onChange={(event, value) => { setCurrentPage(value); }}

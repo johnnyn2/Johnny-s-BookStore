@@ -64,7 +64,7 @@ export const Tools = ({setData}) => {
 
     const handleSearch = (e, options) => {
         const {selectedCategoryId, title, authorName} = options;
-        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 10 })
+        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 4 })
         .then(data => {
             console.log('data: ', data);
             setData(data);

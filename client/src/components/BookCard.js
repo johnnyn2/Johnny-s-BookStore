@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 export const BookCard = ({
     id, title, description, categories,
-    authors, imageStream, currentUser, setSnackBar
+    authors, imageStream, currentUser, setSnackBar, setShowBookInfo
 }) => {
     const classes = useStyles();
 
@@ -42,8 +42,8 @@ export const BookCard = ({
 
     return (
         <Card className={classes.root}>
-            <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: COLORS.FONTS.BLACK }}>
-                <CardActionArea>
+            {/* <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: COLORS.FONTS.BLACK }}> */}
+                <CardActionArea onClick={setShowBookInfo}>
                     <CardMedia
                         component="img"
                         alt={title}
@@ -60,7 +60,7 @@ export const BookCard = ({
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-            </Link>
+            {/* </Link> */}
             <CardActions>
                 <IconButton>
                     <StarIcon />
@@ -84,7 +84,8 @@ BookCard.propTypes = {
         name: PropTypes.string,
         username: PropTypes.string,
         email: PropTypes.string
-    })
+    }),
+    setShowBookInfo: PropTypes.func.isRequired,
 }
 
 export default withRouter(BookCard);
