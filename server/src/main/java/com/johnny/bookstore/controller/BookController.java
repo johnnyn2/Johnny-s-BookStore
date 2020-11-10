@@ -65,7 +65,7 @@ public class BookController {
     }
 
     @PostMapping(value="/getBookById")
-    public Book postMethodName(@RequestParam(value = "id") String id) {
+    public BookResponse postMethodName(@RequestParam(value = "id") String id) {
         return bookService.getBookById(id);
     }
     

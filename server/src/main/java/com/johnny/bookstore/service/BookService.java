@@ -188,7 +188,36 @@ public class BookService {
         return bookRepository.getAll();
     }
 
-    public Book getBookById(String id) {
-        return bookRepository.findById(Long.parseLong(id)).get(); 
+    public BookResponse getBookById(String id) {
+        Book book = bookRepository.findById(Long.parseLong(id)).get();
+        BookResponse res = new BookResponse();
+        try {
+            Path path = Paths.get(BOOK_GALLERY_COVER + "/" + book.getId().toString() + "/gallery_cover.jpg");
+            byte[] imageStream = Files.readAllBytes(path);
+            List<String> categories = book.getCategories().stream().map(c -> c.getName()).collect(Collectors.toList());
+            List<String> authors = book.getAuthors().stream().map(b -> b.getName()).collect(Collectors.toList());
+            res = new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getDescription(),
+                categories,
+                authors,
+                imageStream,
+                book.getPrice(),
+                book.getFormat(),
+                book.getDimensions(),
+                book.getPublicationDate(),
+                book.getPublisher(),
+                book.getPublicanCountry(),
+                book.getLanguage(),
+                book.getIsbn10(),
+                book.getIsbn13(),
+                book.getRank()
+            );
+        } catch(Exception e) {
+            e.printStackTrace();
+            logger.error("Get book error: (BookId) " + book.getId());
+        }
+        return res;
     }
 }

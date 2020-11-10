@@ -19,11 +19,13 @@ const useStyles = makeStyles((theme) => ({
 export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPage, showBookInfo, setShowBookInfo, showBookId, setShowBookId}) => {
     const classes = useStyles();
     
+    const [bookInfo, setBookInfo] = useState({});
+
     useEffect(() => {
         if (showBookInfo) {
             getBookById(showBookId)
-            .then(data => {
-                console.log(data);
+            .then(book => {
+                setBookInfo(book);
             })
             .catch(err => console.error(err))
         }
@@ -39,7 +41,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     return (
         <Card style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {showBookInfo ?
-                <BookInfo /> :
+                <BookInfo bookInfo={bookInfo}/> :
                 <React.Fragment>
                     {data.content.length > 0 ?
                         <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar} setShowBookInfo={setShowBookInfo} setShowBookId={setShowBookId}/>
