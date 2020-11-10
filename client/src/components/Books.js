@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ITEMS_PER_ROW = 3;
 
-export const Books = ({data}) => {
+export const Books = ({data, currentUser, setSnackBar}) => {
     const classes = useStyles();
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -32,7 +32,7 @@ export const Books = ({data}) => {
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             {data.content.length > 0 ?
-                <BookGallery bookRows={bookRows} />
+                <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
             :
                 <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     No results found
@@ -60,6 +60,11 @@ Books.propTypes = {
         totalElements: PropTypes.number.isRequired,
         totalPages: PropTypes.number.isRequired,
     }).isRequired,
+    currentUser: PropTypes.shape({
+        name: PropTypes.string,
+        username: PropTypes.string,
+        email: PropTypes.string
+    })
 }
 
 export default Books;

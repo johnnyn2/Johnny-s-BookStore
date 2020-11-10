@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Login from '../user/login';
 import SignUp from '../user/signup';
+import BookInfo from '../pages/BookInfo';
 import Profile from '../user/profile';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
@@ -82,9 +83,10 @@ function App(props) {
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div style={{width: '100%', height: 'calc(100% - 64px)', display: 'flex'}}>
         <Switch>
-          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} {...props}/>}/>
+          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} setSnackBar={setSnackBar} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
+          <Route path="/books/:id" render={(props) => <BookInfo {...props}></BookInfo>}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </div>

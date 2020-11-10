@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import BooksIcon from '@material-ui/icons/LibraryBooks';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const AppHeader = (props) => {
+    
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -48,9 +50,11 @@ export const AppHeader = (props) => {
                 <Typography variant="h6" className={classes.title}>
                     Johnny's BookStore
                 </Typography>
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                    <BooksIcon />
-                </IconButton>
+                <Link to="/" style={{textDecoration: "none", color: 'inherit'}}>
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                        <HomeIcon />
+                    </IconButton>
+                </Link>
                 <IconButton
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
