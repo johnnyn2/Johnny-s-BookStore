@@ -63,4 +63,10 @@ public class BookController {
     public List<Book> getAll() {
         return bookService.getAll();
     }
+
+    @PostMapping(value="/getBookById")
+    public Book postMethodName(@RequestParam(value = "id") String id) {
+        return bookService.getBookById(id);
+    }
+    
 }

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const Tools = ({setData, currentPage}) => {
+export const Tools = ({setData, currentPage, setShowBookInfo}) => {
     const classes = useStyles();
 
     const initState = {
@@ -73,6 +73,7 @@ export const Tools = ({setData, currentPage}) => {
         .then(data => {
             console.log('data: ', data);
             setData(data);
+            setShowBookInfo(false);
         }).catch(err => console.log(err));
     }
 
@@ -186,5 +187,6 @@ export const Tools = ({setData, currentPage}) => {
 
 Tools.propTypes = {
     setData: PropTypes.func.isRequired,
-    currentPage: PropTypes.number.isRequired
+    currentPage: PropTypes.number.isRequired,
+    setShowBookInfo: PropTypes.func.isRequired
 }

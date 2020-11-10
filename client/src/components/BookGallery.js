@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {BookRow} from '../components/BookRow';
-import {BookCard} from '../components/BookCard';
 
-export const BookGallery = ({bookRows, currentUser, setSnackBar}) => {
+export const BookGallery = ({bookRows, currentUser, setSnackBar, setShowBookInfo, setShowBookId}) => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'auto', alignItems: 'center', justifyContent: 'space-between' }}>
-            {bookRows.map((row, index) => <BookRow key={index} books={row} currentUser={currentUser} setSnackBar={setSnackBar}/>)}
+            {bookRows.map((row, index) => <BookRow key={index} books={row} currentUser={currentUser} setSnackBar={setSnackBar} setShowBookInfo={setShowBookInfo} setShowBookId={setShowBookId}/>)}
         </div>
     );
 }
@@ -17,5 +16,7 @@ BookGallery.propTypes = {
         name: PropTypes.string,
         username: PropTypes.string,
         email: PropTypes.string
-    })
+    }),
+    setShowBookInfo: PropTypes.func.isRequired,
+    setShowBookId: PropTypes.func.isRequired,
 }

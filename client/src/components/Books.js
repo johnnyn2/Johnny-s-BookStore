@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import Card from '@material-ui/core/Card';
-import {getAllBooks, searchBooksByFilter} from '../util/api';
-import {BookRow} from '../components/BookRow';
-import {BookCard} from '../components/BookCard';
-import {BookGallery} from '../components/BookGallery';
+import {BookGallery} from './BookGallery';
+import {BookInfo} from './BookInfo';
 import {ITEMS_PER_ROW, ROWS_PER_PAGE} from '../constants/constants';
+import {getBookById} from '../util/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,9 +16,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPage}) => {
+export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPage, showBookInfo, setShowBookInfo, showBookId, setShowBookId}) => {
     const classes = useStyles();
     
+    useEffect(() => {
+        if (showBookInfo) {
+            getBookById(showBookId)
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => console.error(err))
+        }
+    }, [showBookInfo])
+
     let bookRows = [];
     for(let i =0;i<Math.ceil(data.content.length / ITEMS_PER_ROW); i++) {
         let start = i * ITEMS_PER_ROW;
@@ -28,24 +37,28 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     }
 
     return (
-        <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-            {data.content.length > 0 ?
-                <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
-            :
-                <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    No results found
-                </div>
+        <Card style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            {showBookInfo ?
+                <BookInfo /> :
+                <React.Fragment>
+                    {data.content.length > 0 ?
+                        <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar} setShowBookInfo={setShowBookInfo} setShowBookId={setShowBookId}/>
+                        :
+                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            No results found
+                        </div>
+                    }
+                    <div style={{ display: 'flex', height: '50px', margin: '20px', justifyContent: 'center', alignItems: 'center' }}>
+                        <Pagination
+                            count={data.totalPages}
+                            color="primary"
+                            page={currentPage}
+                            onChange={(event, value) => { setCurrentPage(value); }}
+                        />
+                    </div>
+                </React.Fragment>
             }
-            <div style={{display: 'flex', height: '50px', margin: '20px', justifyContent: 'center', alignItems: 'center'}}>
-                <Pagination
-                    count={data.totalPages}
-                    color="primary"
-                    page={currentPage}
-                    onChange={(event, value) => { setCurrentPage(value); }}
-                />
-            </div>
         </Card>
-        
     );
 }
 
@@ -65,6 +78,10 @@ Books.propTypes = {
     }),
     currentPage: PropTypes.number.isRequired,
     setCurrentPage: PropTypes.func.isRequired,
+    showBookInfo: PropTypes.bool.isRequired,
+    setShowBookInfo: PropTypes.func.isRequired,
+    showBookId: PropTypes.number.isRequired,
+    setShowBookId: PropTypes.func.isRequired,
 }
 
 export default Books;

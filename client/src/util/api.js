@@ -91,3 +91,10 @@ export const searchBooksByFilter = ({categoryId, title, authorName, page, size})
         body: JSON.stringify({categoryId, title, authorName, page, size})
     })
 }
+
+export const getBookById = (bookId) => {
+    return request({
+        url: API_BASE_URL + '/books/getBookById?id=' + bookId,
+        method: 'POST',
+    })
+}

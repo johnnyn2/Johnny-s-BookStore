@@ -1,7 +1,5 @@
 import React from 'react';
 
 export const BookInfo = () => {
-    return <div></div>;
+    return <div>Book Info</div>;
 }
-
-export default BookInfo;
