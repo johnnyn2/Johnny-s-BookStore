@@ -17,10 +17,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Books = ({data, currentUser, setSnackBar}) => {
+export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPage}) => {
     const classes = useStyles();
-    const [currentPage, setCurrentPage] = useState(1);
-
+    
     let bookRows = [];
     for(let i =0;i<Math.ceil(data.content.length / ITEMS_PER_ROW); i++) {
         let start = i * ITEMS_PER_ROW;
@@ -28,14 +27,10 @@ export const Books = ({data, currentUser, setSnackBar}) => {
         bookRows = [...bookRows, data.content.slice(start, end)];
     }
 
-    const pageStart = (currentPage - 1) * ROWS_PER_PAGE;
-    const pageEnd = pageStart + ROWS_PER_PAGE;
-    const paginatedRows = bookRows.slice(pageStart, pageEnd);
-
     return (
         <Card style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             {data.content.length > 0 ?
-                <BookGallery bookRows={paginatedRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
+                <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar}/>
             :
                 <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     No results found
@@ -67,7 +62,9 @@ Books.propTypes = {
         name: PropTypes.string,
         username: PropTypes.string,
         email: PropTypes.string
-    })
+    }),
+    currentPage: PropTypes.number.isRequired,
+    setCurrentPage: PropTypes.func.isRequired,
 }
 
 export default Books;

@@ -53,5 +53,5 @@ export const getFieldLengthErrText = (length, min, max) => {
         return `This field should have at least ${min} and at most ${max} characters`;
     }
 }
-export const ITEMS_PER_ROW = 2;
-export const ROWS_PER_PAGE = 2;
+export const ITEMS_PER_ROW = 3;
+export const ROWS_PER_PAGE = 3;

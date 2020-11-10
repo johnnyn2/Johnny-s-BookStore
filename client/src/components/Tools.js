@@ -9,6 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getAllCategories, searchBooksByFilter } from '../util/api';
+import {ITEMS_PER_ROW, ROWS_PER_PAGE} from '../constants/constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const Tools = ({setData}) => {
+export const Tools = ({setData, currentPage}) => {
     const classes = useStyles();
 
     const initState = {
@@ -62,9 +63,13 @@ export const Tools = ({setData}) => {
         })
     }, [])
 
+    useEffect(() => {
+        handleSearch(null, state);
+    }, [currentPage])
+
     const handleSearch = (e, options) => {
         const {selectedCategoryId, title, authorName} = options;
-        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: 0, size: 4 })
+        searchBooksByFilter({ categoryId: selectedCategoryId, title, authorName, page: currentPage -1, size: ITEMS_PER_ROW * ROWS_PER_PAGE })
         .then(data => {
             console.log('data: ', data);
             setData(data);
@@ -180,5 +185,6 @@ export const Tools = ({setData}) => {
 }
 
 Tools.propTypes = {
-    setData: PropTypes.func.isRequired
+    setData: PropTypes.func.isRequired,
+    currentPage: PropTypes.number.isRequired
 }

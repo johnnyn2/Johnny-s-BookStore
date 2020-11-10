@@ -13,11 +13,12 @@ export const Store = ({currentUser, setSnackBar}) => {
         totalElements: 0,
         totalPages: 0
     });
+    const [currentPage, setCurrentPage] = useState(1);
     return (
         <React.Fragment>
             <div style={{display: 'flex', padding: '20px', flex: 1}}>
-                <Tools setData={setData} />
-                <Books data={data} currentUser={currentUser} setSnackBar={setSnackBar}/>
+                <Tools currentPage={currentPage} setData={setData} />
+                <Books currentPage={currentPage} setCurrentPage={setCurrentPage} data={data} currentUser={currentUser} setSnackBar={setSnackBar}/>
             </div>
         </React.Fragment>
     );
