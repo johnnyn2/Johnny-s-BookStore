@@ -7,6 +7,7 @@ import {BookGallery} from './BookGallery';
 import {BookInfo} from './BookInfo';
 import {ITEMS_PER_ROW, ROWS_PER_PAGE} from '../constants/constants';
 import {getBookById} from '../util/api';
+import BookInfoModel from '../model/BookInfoModel';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPage, showBookInfo, setShowBookInfo, showBookId, setShowBookId}) => {
     const classes = useStyles();
     
-    const [bookInfo, setBookInfo] = useState({});
+    const [bookInfo, setBookInfo] = useState(BookInfoModel);
 
     useEffect(() => {
         if (showBookInfo) {

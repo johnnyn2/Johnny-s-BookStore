@@ -2,16 +2,10 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Tools} from '../components/Tools';
 import {Books} from '../components/Books';
+import PagedResponse from '../model/PagedResponse';
 
 export const Store = ({currentUser, setSnackBar}) => {
-    const [data, setData] = useState({
-        content: [],
-        last: true,
-        page: 0,
-        size: 0,
-        totalElements: 0,
-        totalPages: 0
-    });
+    const [data, setData] = useState(PagedResponse);
     const [currentPage, setCurrentPage] = useState(1);
     const [showBookInfo, setShowBookInfo] = useState(false);
     const [showBookId, setShowBookId] = useState(-1);
