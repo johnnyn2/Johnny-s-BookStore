@@ -29,6 +29,8 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                 setBookInfo(book);
             })
             .catch(err => console.error(err))
+        } else {
+            setBookInfo(BookInfoModel);
         }
     }, [showBookInfo])
 
