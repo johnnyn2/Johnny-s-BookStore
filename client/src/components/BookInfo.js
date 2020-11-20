@@ -7,20 +7,48 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 275,
-    },
-    pos: {
-        marginBottom: 12,
-    },
-});
+const padding = '40px';
+const actionHeight = '46px';
 
 export const BookInfo = ({ bookInfo }) => {
     // console.log('bookinfo: ', bookInfo);
-    const classes = useStyles();
     const titleRef = useRef(null);
     const [titleHeight, setTitleHeight] = useState(0);
+    const useStyles = makeStyles({
+        root: {
+            minWidth: 275,
+            height: '100%'
+        },
+        pos: {
+            marginBottom: 12,
+        },
+        container: {
+            display: 'flex',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%'
+        },
+        cardWrapper: {
+            width: 500,
+            height: `calc(100% - ${padding})`
+        },
+        cardContent: {
+            height: `calc(100% - ${padding} - ${actionHeight})`
+        },
+        cardTitle: {
+            fontSize: '1.8rem'
+        },
+        cardMainContent: {
+            overflow: 'auto',
+            height: `calc(100% - ${titleHeight}px)`
+        },
+        cardNormalText: {
+            fontSize: '1.3rem',
+            marginTop: 15
+        },
+    });
+    const classes = useStyles();
 
     useEffect(() => {
         setTimeout(() => {
@@ -28,6 +56,8 @@ export const BookInfo = ({ bookInfo }) => {
             setTitleHeight(titleHeight);
         }, 1)
     }, [titleRef.current?.clientHeight])
+
+
 
     const {
         authors, categories, description, dimensions,
@@ -37,45 +67,45 @@ export const BookInfo = ({ bookInfo }) => {
     } = bookInfo;
 
     return (
-        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: 500, height:'calc(100% - 40px)' }}>
-                <Card className={classes.root} style={{height: 'calc(100% - 40px)'}}>
-                    <CardContent style={{height: 'calc(100% - 40px - 46px)'}}>
-                        <Typography id="title" variant="h5" component="h2" style={{fontSize: '1.8rem'}} ref={titleRef}>
+        <div className={classes.container}>
+            <div className={classes.cardWrapper}>
+                <Card className={classes.root}>
+                    <CardContent className={classes.cardContent}>
+                        <Typography id="title" variant="h5" component="h2" className={classes.cardTitle} ref={titleRef}>
                             {title}
                         </Typography>
-                        <div style={{overflow: 'auto', height: `calc(100% - ${titleHeight}px)`}}>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                        <div className={classes.cardMainContent}>
+                            <Typography className={classes.cardNormalText}>
                                 Description
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
                                 {description}
                             </Typography>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                            <Typography className={classes.cardNormalText}>
                                 Authors
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
                                 {authors.join(', ')}
                             </Typography>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                            <Typography className={classes.cardNormalText}>
                                 Categories
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
                                 {categories.join(', ')}
                             </Typography>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                            <Typography className={classes.cardNormalText}>
                                 Language
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
                                 {language}
                             </Typography>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                            <Typography className={classes.cardNormalText}>
                                 Publisher
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
                                 {publisher}
                             </Typography>
-                            <Typography style={{fontSize: '1.3rem', marginTop: 15}}>
+                            <Typography className={classes.cardNormalText}>
                                 Publican Country
                             </Typography>
                             <Typography variant="body2" component="p" color="textSecondary">
