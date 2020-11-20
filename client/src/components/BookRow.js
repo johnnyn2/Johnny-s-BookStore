@@ -2,10 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {BookCard} from '../components/BookCard';
 
-export const BookRow = ({books, currentUser, setSnackBar, setShowBookInfo, setShowBookId}) => {
+export const BookRow = ({books, currentUser, setSnackBar, setShowBookInfo, setShowBookId, setEndingScrollPosition, containerRef}) => {
     return (
         <div style={{display: 'flex'}}>
-            {books.map(book => <BookCard key={book.id} {...book} currentUser={currentUser} setSnackBar={setSnackBar} setShowBookInfo={setShowBookInfo} setShowBookId={setShowBookId}/>)}
+            {books.map(book =>
+                <BookCard key={book.id}
+                    {...book}
+                    currentUser={currentUser}
+                    setSnackBar={setSnackBar}
+                    setShowBookInfo={setShowBookInfo}
+                    setShowBookId={setShowBookId}
+                    setEndingScrollPosition={setEndingScrollPosition}
+                    containerRef={containerRef}
+                />)}
         </div>
     )
 }
@@ -26,4 +35,6 @@ BookRow.propTypes = {
     }),
     setShowBookInfo: PropTypes.func.isRequired,
     setShowBookId: PropTypes.func.isRequired,
+    setEndingScrollPosition: PropTypes.func.isRequired,
+    containerRef: PropTypes.shape({current: PropTypes.instanceOf(Element)}),
 }

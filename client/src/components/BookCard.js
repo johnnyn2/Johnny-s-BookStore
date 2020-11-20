@@ -21,7 +21,8 @@ const useStyles = makeStyles({
 
 export const BookCard = ({
     id, title, description, categories,
-    authors, imageStream, currentUser, setSnackBar, setShowBookInfo, setShowBookId
+    authors, imageStream, currentUser, setSnackBar, setShowBookInfo, setShowBookId,
+    setEndingScrollPosition, containerRef
 }) => {
     const classes = useStyles();
 
@@ -45,7 +46,12 @@ export const BookCard = ({
 
     return (
         <Card className={classes.root}>
-            <CardActionArea onClick={e => handleCheckBookInfo(e, id)}>
+            <CardActionArea
+                onClick={e => {
+                    handleCheckBookInfo(e, id);
+                    setEndingScrollPosition(containerRef.current.scrollTop);
+                }}
+            >
                 <CardMedia
                     component="img"
                     alt={title}
@@ -88,6 +94,8 @@ BookCard.propTypes = {
     }),
     setShowBookInfo: PropTypes.func.isRequired,
     setShowBookId: PropTypes.func.isRequired,
+    setEndingScrollPosition: PropTypes.func.isRequired,
+    containerRef: PropTypes.shape({current: PropTypes.instanceOf(Element)}),
 }
 
 export default withRouter(BookCard);

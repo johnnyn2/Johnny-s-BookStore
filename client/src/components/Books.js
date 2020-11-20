@@ -21,6 +21,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     const classes = useStyles();
     
     const [bookInfo, setBookInfo] = useState(BookInfoModel);
+    const [scrollTop, setScrollTop] = useState(0);
 
     useEffect(() => {
         if (showBookInfo) {
@@ -47,7 +48,15 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                 <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo}/> :
                 <React.Fragment>
                     {data.content.length > 0 ?
-                        <BookGallery bookRows={bookRows} currentUser={currentUser} setSnackBar={setSnackBar} setShowBookInfo={setShowBookInfo} setShowBookId={setShowBookId}/>
+                        <BookGallery
+                            scrollTop={scrollTop}
+                            setScrollTop={setScrollTop}
+                            bookRows={bookRows}
+                            currentUser={currentUser}
+                            setSnackBar={setSnackBar}
+                            setShowBookInfo={setShowBookInfo}
+                            setShowBookId={setShowBookId}
+                        />
                         :
                         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                             No results found
