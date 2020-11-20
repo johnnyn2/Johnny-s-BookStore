@@ -16,9 +16,14 @@ import { ACCESS_TOKEN } from '../constants/constants';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import css from './App.css';
+import Grow from '@material-ui/core/Grow';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+function GrowTransition(props) {
+  return <Grow {...props} />;
 }
 
 function App(props) {
@@ -83,13 +88,13 @@ function App(props) {
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div style={{width: '100%', height: 'calc(100% - 64px)', display: 'flex'}}>
         <Switch>
-          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} setSnackBar={setSnackBar} {...props}/>}/>
+          <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} controlSnackBar={controlSnackBar} setSnackBar={setSnackBar} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </div>
-      <Snackbar autoHideDuration={5000} open={snackBar.open} onClose={() => controlSnackBar(false)}>
+      <Snackbar autoHideDuration={5000} open={snackBar.open} onClose={() => controlSnackBar(false)} TransitionComponent={GrowTransition} key={GrowTransition.name}>
         <Alert onClose={() => controlSnackBar(false)} severity={snackBar.severity}>
           {snackBar.message}
         </Alert>

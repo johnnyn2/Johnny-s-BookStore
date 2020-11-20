@@ -21,23 +21,10 @@ const useStyles = makeStyles({
 
 export const BookCard = ({
     id, title, description, categories,
-    authors, imageStream, currentUser, setSnackBar, setShowBookInfo, setShowBookId,
-    setEndingScrollPosition, containerRef
+    authors, imageStream, price, setShowBookInfo, setShowBookId,
+    setEndingScrollPosition, containerRef, addToCart
 }) => {
     const classes = useStyles();
-
-    const addToCart = (e) => {
-        if (currentUser) {
-            console.log(currentUser);
-        } else {
-            console.log("no current user");
-            setSnackBar({
-                open: true,
-                message: "Please sign in first",
-                severity: "info"
-            });
-        }
-    }
 
     const handleCheckBookInfo = (e, id) => {
         setShowBookInfo(true);
@@ -72,7 +59,7 @@ export const BookCard = ({
                 <IconButton>
                     <StarIcon />
                 </IconButton>
-                <IconButton onClick={e => addToCart(e)}>
+                <IconButton onClick={e => addToCart(e, {id: id, title: title, price: price})}>
                     <ShoppingCartIcon />
                 </IconButton>
             </CardActions>
@@ -87,15 +74,12 @@ BookCard.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     authors: PropTypes.arrayOf(PropTypes.string).isRequired,
     imageStream: PropTypes.string.isRequired,
-    currentUser: PropTypes.shape({
-        name: PropTypes.string,
-        username: PropTypes.string,
-        email: PropTypes.string
-    }),
+    price: PropTypes.number.isRequired,
     setShowBookInfo: PropTypes.func.isRequired,
     setShowBookId: PropTypes.func.isRequired,
     setEndingScrollPosition: PropTypes.func.isRequired,
     containerRef: PropTypes.shape({current: PropTypes.instanceOf(Element)}),
+    addToCart: PropTypes.func.isRequired
 }
 
 export default withRouter(BookCard);

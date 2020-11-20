@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {BookRow} from '../components/BookRow';
 
-export const BookGallery = ({scrollTop, setScrollTop, bookRows, currentUser, setSnackBar, setShowBookInfo, setShowBookId}) => {
+export const BookGallery = ({scrollTop, setScrollTop, bookRows, setSnackBar, setShowBookInfo, setShowBookId, addToCart}) => {
     const styles = {
         display: 'flex',
         flexDirection: 'column',
@@ -22,12 +22,12 @@ export const BookGallery = ({scrollTop, setScrollTop, bookRows, currentUser, set
                 <BookRow
                     key={index}
                     books={row}
-                    currentUser={currentUser}
                     setSnackBar={setSnackBar}
                     setShowBookInfo={setShowBookInfo}
                     setShowBookId={setShowBookId}
                     setEndingScrollPosition={setScrollTop}
                     containerRef={containerRef}
+                    addToCart={addToCart}
                 />)}
         </div>
     );
@@ -37,11 +37,7 @@ BookGallery.propTypes = {
     scrollTop: PropTypes.number.isRequired,
     setScrollTop: PropTypes.func.isRequired,
     bookRows: PropTypes.arrayOf(PropTypes.array).isRequired,
-    currentUser: PropTypes.shape({
-        name: PropTypes.string,
-        username: PropTypes.string,
-        email: PropTypes.string
-    }),
     setShowBookInfo: PropTypes.func.isRequired,
     setShowBookId: PropTypes.func.isRequired,
+    addToCart: PropTypes.func.isRequired
 }

@@ -6,11 +6,14 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import { IconButton } from '@material-ui/core';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const padding = '40px';
 const actionHeight = '46px';
 
-export const BookInfo = ({ bookInfo, setShowBookInfo }) => {
+export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart }) => {
     // console.log('bookinfo: ', bookInfo);
     const titleRef = useRef(null);
     const [titleHeight, setTitleHeight] = useState(0);
@@ -50,6 +53,10 @@ export const BookInfo = ({ bookInfo, setShowBookInfo }) => {
         coverContainer: {
             width: '400px',
             height: 'calc(100% - 40px)' 
+        },
+        cardActions: {
+            padding: 0,
+            justifyContent: 'center'
         }
     });
     const classes = useStyles();
@@ -118,8 +125,13 @@ export const BookInfo = ({ bookInfo, setShowBookInfo }) => {
                             </div>
                         : <span/>}
                     </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={() => setShowBookInfo(false)}>Close</Button>
+                    <CardActions className={classes.cardActions}>
+                        <IconButton onClick={e => addToCart(e, {id, title, price})}>
+                            <ShoppingCartIcon />
+                        </IconButton>
+                        <IconButton onClick={() => setShowBookInfo(false)}>
+                            <CloseIcon />
+                        </IconButton>
                     </CardActions>
                 </Card>
             </div>
@@ -150,4 +162,5 @@ BookInfo.propTypes = {
         title: PropTypes.string.isRequired,
     }).isRequired,
     setShowBookInfo: PropTypes.func.isRequired,
+    addToCart: PropTypes.func.isRequired,
 }

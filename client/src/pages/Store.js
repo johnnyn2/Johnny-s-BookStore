@@ -9,6 +9,7 @@ export const Store = ({currentUser, setSnackBar}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [showBookInfo, setShowBookInfo] = useState(false);
     const [showBookId, setShowBookId] = useState(-1);
+    
     return (
         <React.Fragment>
             <div style={{display: 'flex', padding: '20px', flex: 1}}>

@@ -35,6 +35,35 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
         }
     }, [showBookInfo])
 
+    const addToCart = (e, cartItem) => {
+        console.log('Add to Cart: ', cartItem);
+        if (currentUser) {
+            const shoppingCartStr = localStorage.getItem('shoppingCart');
+            let shoppingCart = null;
+            if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
+                shoppingCart = JSON.parse(shoppingCartStr);
+            } else {
+                shoppingCart = [];
+            }
+            if (shoppingCart.filter(item => item.id === cartItem.id).length === 0) {
+                shoppingCart.push(cartItem);
+                localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+            }
+            setSnackBar({
+                open: true,
+                message: "Added to cart",
+                severity: "success"
+            });
+        } else {
+            console.log("no current user");
+            setSnackBar({
+                open: true,
+                message: "Please sign in first",
+                severity: "info"
+            });
+        }
+    }
+
     let bookRows = [];
     for(let i =0;i<Math.ceil(data.content.length / ITEMS_PER_ROW); i++) {
         let start = i * ITEMS_PER_ROW;
@@ -45,7 +74,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     return (
         <Card style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {showBookInfo ?
-                <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo}/> :
+                <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo} addToCart={addToCart}/> :
                 <React.Fragment>
                     {data.content.length > 0 ?
                         <BookGallery
@@ -56,6 +85,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                             setSnackBar={setSnackBar}
                             setShowBookInfo={setShowBookInfo}
                             setShowBookId={setShowBookId}
+                            addToCart={addToCart}
                         />
                         :
                         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
