@@ -15,6 +15,7 @@ import { getCurrentUser } from '../util/api';
 import { ACCESS_TOKEN } from '../constants/constants';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import css from './App.css';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
