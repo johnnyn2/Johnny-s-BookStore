@@ -47,6 +47,10 @@ export const BookInfo = ({ bookInfo }) => {
             fontSize: '1.3rem',
             marginTop: 15
         },
+        coverContainer: {
+            width: '400px',
+            height: 'calc(100% - 40px)' 
+        }
     });
     const classes = useStyles();
 
@@ -118,8 +122,8 @@ export const BookInfo = ({ bookInfo }) => {
                     </CardActions>
                 </Card>
             </div>
-            <div style={{ width: 300 }}>
-
+            <div className={classes.coverContainer}>
+                <img src={`data:image/jpeg;base64,${imageStream}`} width="100%" height="auto"/>
             </div>
         </div>
     );

@@ -14,7 +14,8 @@ export const BookInfoModel = {
     publicationDate: '',
     publisher: '',
     rank: -1,
-    title: ''
+    title: '',
+    imageStream: '',
 }
 
 export default BookInfoModel;
