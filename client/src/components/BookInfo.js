@@ -8,12 +8,13 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { IconButton } from '@material-ui/core';
+import StarIcon from '@material-ui/icons/Star';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const padding = '40px';
 const actionHeight = '46px';
 
-export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart, shoppingCart }) => {
+export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart, shoppingCart, addToBookMarks, bookMarks}) => {
     // console.log('bookinfo: ', bookInfo);
     const titleRef = useRef(null);
     const [titleHeight, setTitleHeight] = useState(0);
@@ -126,6 +127,9 @@ export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart, shoppingCart })
                         : <span/>}
                     </CardContent>
                     <CardActions className={classes.cardActions}>
+                        <IconButton onClick={e => addToBookMarks(e, {id, title, price})}>
+                            <StarIcon htmlColor={bookMarks.filter(item => item.id === id).length > 0 ? '#f5ef42' : ''}/>
+                        </IconButton>
                         <IconButton onClick={e => addToCart(e, {id, title, price})}>
                             <ShoppingCartIcon htmlColor={shoppingCart.filter(item => item.id === id).length > 0 ? 'red' : ''}/>
                         </IconButton>
@@ -164,4 +168,6 @@ BookInfo.propTypes = {
     setShowBookInfo: PropTypes.func.isRequired,
     addToCart: PropTypes.func.isRequired,
     shoppingCart: PropTypes.array.isRequired,
+    addToBookMarks: PropTypes.func.isRequired,
+    bookMarks: PropTypes.array.isRequired,
 }

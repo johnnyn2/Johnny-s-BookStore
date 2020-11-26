@@ -22,6 +22,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     
     const [bookInfo, setBookInfo] = useState(BookInfoModel);
     const [shoppingCart, setShoppingCart] = useState([]);
+    const [bookMarks, setBookMarks] = useState([]);
     const [scrollTop, setScrollTop] = useState(0);
 
     useEffect(() => {
@@ -67,6 +68,30 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
         }
     }
 
+    const addToBookMarks = (e, bookItem) => {
+        if (currentUser) {
+            if (bookMarks.filter(item => item.id === bookItem.id).length === 0) {
+                setBookMarks(prevCart => {
+                    const newCart = [...prevCart, bookItem];
+                    localStorage.setItem('bookMarks', JSON.stringify(newCart));
+                    return newCart;
+                });
+            } else {
+                setBookMarks(prevCart => {
+                    const newCart = [...prevCart.filter(item => item.id !== bookItem.id)];
+                    localStorage.setItem('bookMarks', JSON.stringify(newCart));
+                    return newCart;
+                })
+            }
+        } else {
+            setSnackBar({
+                open: true,
+                message: "Please sign in first",
+                severity: "info"
+            });
+        }
+    }
+
     let bookRows = [];
     for(let i =0;i<Math.ceil(data.content.length / ITEMS_PER_ROW); i++) {
         let start = i * ITEMS_PER_ROW;
@@ -77,7 +102,14 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     return (
         <Card style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {showBookInfo ?
-                <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo} addToCart={addToCart} shoppingCart={shoppingCart}/> :
+                <BookInfo
+                    setShowBookInfo={setShowBookInfo}
+                    bookInfo={bookInfo}
+                    addToCart={addToCart}
+                    shoppingCart={shoppingCart}
+                    addToBookMarks={addToBookMarks}
+                    bookMarks={bookMarks}
+                /> :
                 <React.Fragment>
                     {data.content.length > 0 ?
                         <BookGallery
@@ -90,6 +122,8 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                             setShowBookId={setShowBookId}
                             addToCart={addToCart}
                             shoppingCart={shoppingCart}
+                            addToBookMarks={addToBookMarks}
+                            bookMarks={bookMarks}
                         />
                         :
                         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
