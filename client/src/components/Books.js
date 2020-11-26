@@ -36,7 +36,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                 setBookMarks(JSON.parse(bookMarksStr));
             }
         }
-    }, [])
+    }, [currentUser])
 
     useEffect(() => {
         if (showBookInfo) {
