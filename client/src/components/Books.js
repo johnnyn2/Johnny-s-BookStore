@@ -26,9 +26,15 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     const [scrollTop, setScrollTop] = useState(0);
 
     useEffect(() => {
-        const shoppingCartStr = localStorage.getItem('shoppingCart');
-        if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
-            setShoppingCart(JSON.parse(shoppingCartStr));
+        if (currentUser) {
+            const shoppingCartStr = localStorage.getItem('shoppingCart');
+            if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
+                setShoppingCart(JSON.parse(shoppingCartStr));
+            }
+            const bookMarksStr = localStorage.getItem('bookMarks');
+            if (typeof bookMarksStr !== null && bookMarksStr !== null) {
+                setBookMarks(JSON.parse(bookMarksStr));
+            }
         }
     }, [])
 

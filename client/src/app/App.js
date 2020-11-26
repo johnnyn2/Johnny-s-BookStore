@@ -60,11 +60,7 @@ function App(props) {
     setIsAuthenticated(false);
 
     props.history.push(redirectTo);
-    setSnackBar({
-      open: true,
-      message,
-      severity: "success"
-    })
+    window.location.replace("/");
   }
 
   const handleLogin = () => {
