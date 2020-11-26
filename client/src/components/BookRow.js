@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {BookCard} from '../components/BookCard';
 
-export const BookRow = ({books, setSnackBar, setShowBookInfo, setShowBookId, setEndingScrollPosition, containerRef, addToCart}) => {
+export const BookRow = ({books, setSnackBar, setShowBookInfo, setShowBookId, setEndingScrollPosition, containerRef, addToCart, shoppingCart}) => {
     return (
         <div style={{display: 'flex'}}>
             {books.map(book =>
@@ -14,6 +14,7 @@ export const BookRow = ({books, setSnackBar, setShowBookInfo, setShowBookId, set
                     setEndingScrollPosition={setEndingScrollPosition}
                     containerRef={containerRef}
                     addToCart={addToCart}
+                    shoppingCart={shoppingCart}
                 />)}
         </div>
     )
@@ -33,5 +34,6 @@ BookRow.propTypes = {
     setShowBookId: PropTypes.func.isRequired,
     setEndingScrollPosition: PropTypes.func.isRequired,
     containerRef: PropTypes.shape({current: PropTypes.instanceOf(Element)}),
-    addToCart: PropTypes.func.isRequired
+    addToCart: PropTypes.func.isRequired,
+    shoppingCart: PropTypes.array.isRequired,
 }

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 export const BookCard = ({
     id, title, description, categories,
     authors, imageStream, price, setShowBookInfo, setShowBookId,
-    setEndingScrollPosition, containerRef, addToCart
+    setEndingScrollPosition, containerRef, addToCart, shoppingCart
 }) => {
     const classes = useStyles();
 
@@ -60,7 +60,7 @@ export const BookCard = ({
                     <StarIcon />
                 </IconButton>
                 <IconButton onClick={e => addToCart(e, {id: id, title: title, price: price})}>
-                    <ShoppingCartIcon />
+                    <ShoppingCartIcon htmlColor={shoppingCart.filter(item => item.id === id).length > 0 ? "red" : ""}/>
                 </IconButton>
             </CardActions>
         </Card>
@@ -79,7 +79,8 @@ BookCard.propTypes = {
     setShowBookId: PropTypes.func.isRequired,
     setEndingScrollPosition: PropTypes.func.isRequired,
     containerRef: PropTypes.shape({current: PropTypes.instanceOf(Element)}),
-    addToCart: PropTypes.func.isRequired
+    addToCart: PropTypes.func.isRequired,
+    shoppingCart: PropTypes.array.isRequired
 }
 
 export default withRouter(BookCard);

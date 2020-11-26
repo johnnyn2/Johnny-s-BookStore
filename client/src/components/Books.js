@@ -21,7 +21,15 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     const classes = useStyles();
     
     const [bookInfo, setBookInfo] = useState(BookInfoModel);
+    const [shoppingCart, setShoppingCart] = useState([]);
     const [scrollTop, setScrollTop] = useState(0);
+
+    useEffect(() => {
+        const shoppingCartStr = localStorage.getItem('shoppingCart');
+        if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
+            setShoppingCart(JSON.parse(shoppingCartStr));
+        }
+    }, [])
 
     useEffect(() => {
         if (showBookInfo) {
@@ -36,26 +44,21 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     }, [showBookInfo])
 
     const addToCart = (e, cartItem) => {
-        console.log('Add to Cart: ', cartItem);
         if (currentUser) {
-            const shoppingCartStr = localStorage.getItem('shoppingCart');
-            let shoppingCart = null;
-            if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
-                shoppingCart = JSON.parse(shoppingCartStr);
-            } else {
-                shoppingCart = [];
-            }
             if (shoppingCart.filter(item => item.id === cartItem.id).length === 0) {
-                shoppingCart.push(cartItem);
-                localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+                setShoppingCart(prevCart => {
+                    const newCart = [...prevCart, cartItem];
+                    localStorage.setItem('shoppingCart', JSON.stringify(newCart));
+                    return newCart;
+                });
+            } else {
+                setShoppingCart(prevCart => {
+                    const newCart = [...prevCart.filter(item => item.id !== cartItem.id)];
+                    localStorage.setItem('shoppingCart', JSON.stringify(newCart));
+                    return newCart;
+                })
             }
-            setSnackBar({
-                open: true,
-                message: "Added to cart",
-                severity: "success"
-            });
         } else {
-            console.log("no current user");
             setSnackBar({
                 open: true,
                 message: "Please sign in first",
@@ -86,6 +89,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
                             setShowBookInfo={setShowBookInfo}
                             setShowBookId={setShowBookId}
                             addToCart={addToCart}
+                            shoppingCart={shoppingCart}
                         />
                         :
                         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
