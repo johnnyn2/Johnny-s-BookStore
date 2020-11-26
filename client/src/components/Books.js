@@ -77,7 +77,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     return (
         <Card style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {showBookInfo ?
-                <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo} addToCart={addToCart}/> :
+                <BookInfo setShowBookInfo={setShowBookInfo} bookInfo={bookInfo} addToCart={addToCart} shoppingCart={shoppingCart}/> :
                 <React.Fragment>
                     {data.content.length > 0 ?
                         <BookGallery

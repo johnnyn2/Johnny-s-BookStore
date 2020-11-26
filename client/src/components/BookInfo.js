@@ -13,7 +13,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 const padding = '40px';
 const actionHeight = '46px';
 
-export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart }) => {
+export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart, shoppingCart }) => {
     // console.log('bookinfo: ', bookInfo);
     const titleRef = useRef(null);
     const [titleHeight, setTitleHeight] = useState(0);
@@ -127,7 +127,7 @@ export const BookInfo = ({ bookInfo, setShowBookInfo, addToCart }) => {
                     </CardContent>
                     <CardActions className={classes.cardActions}>
                         <IconButton onClick={e => addToCart(e, {id, title, price})}>
-                            <ShoppingCartIcon />
+                            <ShoppingCartIcon htmlColor={shoppingCart.filter(item => item.id === id).length > 0 ? 'red' : ''}/>
                         </IconButton>
                         <IconButton onClick={() => setShowBookInfo(false)}>
                             <CloseIcon />
@@ -163,4 +163,5 @@ BookInfo.propTypes = {
     }).isRequired,
     setShowBookInfo: PropTypes.func.isRequired,
     addToCart: PropTypes.func.isRequired,
+    shoppingCart: PropTypes.array.isRequired,
 }
