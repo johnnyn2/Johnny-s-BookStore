@@ -26,7 +26,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     const [scrollTop, setScrollTop] = useState(0);
 
     useEffect(() => {
-        if (currentUser) {
+        if (currentUser.name !== '') {
             const shoppingCartStr = localStorage.getItem('shoppingCart');
             if (typeof shoppingCartStr !== null && shoppingCartStr !== null) {
                 setShoppingCart(JSON.parse(shoppingCartStr));
