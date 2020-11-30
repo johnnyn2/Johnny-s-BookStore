@@ -51,7 +51,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     }, [showBookInfo])
 
     const addToCart = (e, cartItem) => {
-        if (currentUser) {
+        if (currentUser.name !== '') {
             if (shoppingCart.filter(item => item.id === cartItem.id).length === 0) {
                 setShoppingCart(prevCart => {
                     const newCart = [...prevCart, cartItem];
@@ -75,7 +75,7 @@ export const Books = ({data, currentUser, setSnackBar, currentPage, setCurrentPa
     }
 
     const addToBookMarks = (e, bookItem) => {
-        if (currentUser) {
+        if (currentUser.name !== '') {
             if (bookMarks.filter(item => item.id === bookItem.id).length === 0) {
                 setBookMarks(prevCart => {
                     const newCart = [...prevCart, bookItem];
