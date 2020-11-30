@@ -75,10 +75,11 @@ export const AppHeader = (props) => {
                     open={open}
                     onClose={handleClose}
                 >
-                    {props.currentUser ?
+                    {props.currentUser.name !== '' ?
                         <div>
-                            <MenuItem onClick={handleClose}>Dashboard</MenuItem>
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                            <Link to="/payment" style={{textDecoration: 'none', color: COLORS.FONTS.BLACK}}>
+                                <MenuItem onClick={handleClose}>Payment</MenuItem>
+                            </Link>
                             <MenuItem onClick={() => props.onLogout()}>Sign out</MenuItem>
                         </div> :
                         <div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Tools} from '../components/Tools';
 import {Books} from '../components/Books';
 import PagedResponse from '../model/PagedResponse';
+import { Typography } from '@material-ui/core';
 
 export const Store = ({currentUser, setSnackBar}) => {
     const [data, setData] = useState(PagedResponse);
@@ -12,8 +13,8 @@ export const Store = ({currentUser, setSnackBar}) => {
     
     return (
         <React.Fragment>
-            <div style={{display: 'flex', padding: '20px', flex: 1}}>
-                <Tools currentPage={currentPage} setData={setData} setShowBookInfo={setShowBookInfo}/>
+            <div style={{display: 'flex', padding: '20px', flex: 1}}>             
+                <Tools name={currentUser.name} currentPage={currentPage} setData={setData} setShowBookInfo={setShowBookInfo}/>
                 <Books
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}

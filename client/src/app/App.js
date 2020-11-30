@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {
+  BrowserRouter as Router,
   Route,
   withRouter,
-  Switch
+  Switch,
+  useHistory
 } from 'react-router-dom';
 import Login from '../user/login';
 import SignUp from '../user/signup';
@@ -17,6 +19,7 @@ import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import css from './App.css';
 import Grow from '@material-ui/core/Grow';
+import { Payment } from '../pages/payment';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -27,23 +30,24 @@ function GrowTransition(props) {
 }
 
 function App(props) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({name: '', username: '', email: ''});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [snackBar, setSnackBar] = useState({open: false, message: "", severity: ""});
   const [isLoading, setIsLoading] = useState(false);
   
-  const loadCurrentUser = () => {
+  async function loadCurrentUser() {
     setIsLoading(true);
-    getCurrentUser().then(res => {
+    return getCurrentUser().then(res => {
       setCurrentUser(res);
       setIsAuthenticated(true);
       setIsLoading(false);
-      props.history.push("/");
       setSnackBar({
         open: true,
         message: "You're successfully signed in",
         severity: "success"
       });
+      console.log('set isLoggedin');
+      return true;
     }).catch(err => {
       setIsLoading(false);
       setSnackBar({
@@ -51,20 +55,23 @@ function App(props) {
         message: "Something went wrong",
         severity: "error"
       })
+      return false;
     })
   }
 
   const handleLogout = (redirectTo="/", message="You're successfully signed out.") => {
     localStorage.removeItem(ACCESS_TOKEN);
-    setCurrentUser(null);
+    setCurrentUser({name: '', username: '', email: ''});
     setIsAuthenticated(false);
-
-    props.history.push(redirectTo);
     window.location.replace("/");
   }
 
   const handleLogin = () => {
-    loadCurrentUser();
+    loadCurrentUser().then(isLoggedIn => {
+      if (isLoggedIn) {
+        window.location.replace("/");
+      }
+    });
   }
 
   const controlSnackBar = (open) => setSnackBar((prevState) => ({...prevState, open,}));
@@ -80,12 +87,14 @@ function App(props) {
     }
   }, [])
   return (
+    <Router>
     <div style={{width: '100%', height: '100%'}}>
       <AppHeader onLogout={handleLogout} currentUser={currentUser}/>
       <div style={{width: '100%', height: 'calc(100% - 64px)', display: 'flex'}}>
         <Switch>
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} controlSnackBar={controlSnackBar} setSnackBar={setSnackBar} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
+          <Route path="/payment" render={(props) => <Payment isAuthenticated={isAuthenticated} currentUser={currentUser} controlSnackBar={controlSnackBar} setSnackBar={setSnackBar} {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
         </Switch>
@@ -96,7 +105,8 @@ function App(props) {
         </Alert>
       </Snackbar>
     </div>
+    </Router>
   );
 }
 
-export default withRouter(App);
+export default App;

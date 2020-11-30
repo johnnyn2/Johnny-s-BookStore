@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getAllCategories, searchBooksByFilter } from '../util/api';
 import {ITEMS_PER_ROW, ROWS_PER_PAGE} from '../constants/constants';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const Tools = ({setData, currentPage, setShowBookInfo}) => {
+export const Tools = ({setData, currentPage, setShowBookInfo, name}) => {
     const classes = useStyles();
 
     const initState = {
@@ -117,6 +118,7 @@ export const Tools = ({setData, currentPage, setShowBookInfo}) => {
 
     return (
         <div className={classes.root}>
+            {name === '' ? <span/> : <Typography>Hello, {name}</Typography>}
             <List component="nav" aria-label="Book Categories" style={{width: 280}}>
                 <ListItem
                     button
@@ -188,5 +190,6 @@ export const Tools = ({setData, currentPage, setShowBookInfo}) => {
 Tools.propTypes = {
     setData: PropTypes.func.isRequired,
     currentPage: PropTypes.number.isRequired,
-    setShowBookInfo: PropTypes.func.isRequired
+    setShowBookInfo: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
 }
