@@ -1,6 +1,7 @@
 package com.johnny.bookstore.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import com.johnny.bookstore.payload.request.SearchBooksByFilter;
 import com.johnny.bookstore.payload.response.ApiResponse;
 import com.johnny.bookstore.payload.response.BookResponse;
 import com.johnny.bookstore.payload.response.PagedResponse;
+import com.johnny.bookstore.payload.response.PaymentBookItem;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.service.BookService;
 import com.johnny.bookstore.util.AppConstants;
@@ -69,4 +71,8 @@ public class BookController {
         return bookService.getBookById(id);
     }
     
+    @PostMapping(value = "/getBooksByIds")
+    public List<PaymentBookItem> getBooksByIds(@RequestBody Long[] ids) {
+        return bookService.getBooksByIds(ids);
+    }
 }

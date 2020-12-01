@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,10 +6,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import {EnhancedTableHead} from './EnhancedTableHead';
 import {EnhancedTableToolbar} from './EnhancedTableToolbar';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,21 +35,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const rows = [
-    createData('Cupcake', '', '', '', 4.3),
-    createData('Donut', '', '', '', 4.9),
-    createData('Eclair', '', '', '', 6.0),
-    createData('Frozen yoghurt', '', '', '', 4.0),
-    createData('Gingerbread', '', '', '', 3.9),
-    createData('Honeycomb', '', '', '', 6.5),
-    createData('Ice cream sandwich', '', '', '', 4.3),
-    createData('Jelly Bean', '', '', '', 0.0),
-    createData('KitKat', '', '', '', 7.0),
-    createData('Lollipop', '', '', '', 0.0),
-    createData('Marshmallow', '', '', '', 2.0),
-    createData('Nougat', '', '', '', 37.0),
-    createData('Oreo', '', '', '', 4.0),
-];
+// const rows = [
+//     createData('Cupcake', '', '', '', 4.3),
+//     createData('Donut', '', '', '', 4.9),
+//     createData('Eclair', '', '', '', 6.0),
+//     createData('Frozen yoghurt', '', '', '', 4.0),
+//     createData('Gingerbread', '', '', '', 3.9),
+//     createData('Honeycomb', '', '', '', 6.5),
+//     createData('Ice cream sandwich', '', '', '', 4.3),
+//     createData('Jelly Bean', '', '', '', 0.0),
+//     createData('KitKat', '', '', '', 7.0),
+//     createData('Lollipop', '', '', '', 0.0),
+//     createData('Marshmallow', '', '', '', 2.0),
+//     createData('Nougat', '', '', '', 37.0),
+//     createData('Oreo', '', '', '', 4.0),
+// ];
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -81,13 +81,19 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export const EnhancedTable = () => {
+export const EnhancedTable = ({headCells, data}) => {
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('price');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rows, setRows] = useState([]);
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('price');
+    const [selected, setSelected] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    useEffect(() => {
+        console.log('table: ' + data);
+        setRows(data);
+    }, [data]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -97,7 +103,7 @@ export const EnhancedTable = () => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = rows.map((n) => n.title);
             setSelected(newSelecteds);
             return;
         }
@@ -150,6 +156,7 @@ export const EnhancedTable = () => {
                     >
                         <EnhancedTableHead
                             classes={classes}
+                            headCells={headCells}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -161,17 +168,16 @@ export const EnhancedTable = () => {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.title);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row.title)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.title}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -210,4 +216,9 @@ export const EnhancedTable = () => {
             </div>
         </div>
     );
+}
+
+EnhancedTable.propTypes = {
+    headCells: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired
 }

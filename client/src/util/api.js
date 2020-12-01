@@ -98,3 +98,11 @@ export const getBookById = (bookId) => {
         method: 'POST',
     })
 }
+
+export const getBooksByIds = (bookIds) => {
+    return request({
+        url: API_BASE_URL + '/books/getBooksByIds',
+        method: 'POST',
+        body: JSON.stringify(bookIds)
+    })
+}

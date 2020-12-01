@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -28,6 +29,7 @@ import com.johnny.bookstore.model.CategoryName;
 import com.johnny.bookstore.payload.request.AddBook;
 import com.johnny.bookstore.payload.response.BookResponse;
 import com.johnny.bookstore.payload.response.PagedResponse;
+import com.johnny.bookstore.payload.response.PaymentBookItem;
 import com.johnny.bookstore.repository.AuthorRepository;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.CategoryRepository;
@@ -219,5 +221,27 @@ public class BookService {
             logger.error("Get book error: (BookId) " + book.getId());
         }
         return res;
+    }
+
+    public List<PaymentBookItem> getBooksByIds(Long[] ids) {
+        List<PaymentBookItem> paymentBookItems = null;
+        try {
+            List<Book> books = bookRepository.getBooksByIds(ids);
+            paymentBookItems = books.stream().map(book -> {
+                List<String> categories = book.getCategories().stream().map(c -> c.getName()).collect(Collectors.toList());
+                List<String> authors = book.getAuthors().stream().map(b -> b.getName()).collect(Collectors.toList());
+                PaymentBookItem paymentBookItem = new PaymentBookItem();
+                paymentBookItem.setId(book.getId());
+                paymentBookItem.setAuthors(authors);
+                paymentBookItem.setCategories(categories);
+                paymentBookItem.setLanguage(book.getLanguage());
+                paymentBookItem.setPrice(book.getPrice());
+                paymentBookItem.setTitle(book.getTitle());
+                return paymentBookItem;
+            }).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return paymentBookItems;
     }
 }

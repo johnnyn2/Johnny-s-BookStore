@@ -60,5 +60,4 @@ public class DynamicBookRepositoryImpl implements DynamicBookRepository {
         Page<Book> bookPage = new PageImpl<Book>(results, pageable, totalSize);
         return bookPage;
     }
-    
 }

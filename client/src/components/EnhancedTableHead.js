@@ -6,16 +6,16 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const headCells = [
-    { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
-    { id: 'authors', numeric: false, disablePadding: false, label: 'Author(s)' },
-    { id: 'categories', numeric: false, disablePadding: false, label: 'Categorie(s)' },
-    { id: 'language', numeric: false, disablePadding: false, label: 'Language' },
-    { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-];
+// const headCells = [
+//     { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
+//     { id: 'authors', numeric: false, disablePadding: false, label: 'Author(s)' },
+//     { id: 'categories', numeric: false, disablePadding: false, label: 'Categorie(s)' },
+//     { id: 'language', numeric: false, disablePadding: false, label: 'Language' },
+//     { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
+// ];
 
 export const EnhancedTableHead = (props) => {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -59,10 +59,12 @@ export const EnhancedTableHead = (props) => {
 
 EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
+    headCells: PropTypes.array.isRequired,
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
+    headCells: PropTypes.array.isRequired,
 };

@@ -29,4 +29,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, DynamicBookRe
 
     @Query("SELECT b FROM Book b")
     List<Book> getAll();
+
+    @Query("SELECT b FROM Book b WHERE b.id in :ids")
+    List<Book> getBooksByIds(@Param("ids") Long[] ids);
 }
