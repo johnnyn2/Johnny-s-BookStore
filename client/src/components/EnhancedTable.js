@@ -81,7 +81,7 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export const EnhancedTable = ({headCells, data}) => {
+export const EnhancedTable = ({headCells, data, removeItem}) => {
     const classes = useStyles();
     const [rows, setRows] = useState([]);
     const [order, setOrder] = useState('asc');
@@ -91,7 +91,6 @@ export const EnhancedTable = ({headCells, data}) => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
     useEffect(() => {
-        console.log('table: ' + data);
         setRows(data);
     }, [data]);
 
@@ -110,12 +109,12 @@ export const EnhancedTable = ({headCells, data}) => {
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event, id) => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -139,6 +138,10 @@ export const EnhancedTable = ({headCells, data}) => {
         setPage(0);
     };
 
+    const removeItem = (id) => {
+        setBookData(bookData.filter(item => item.id !== id));
+    };
+
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -146,7 +149,7 @@ export const EnhancedTable = ({headCells, data}) => {
     return (
         <div className={classes.root}>
             <div>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} removeItem={removeItem}/>
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -168,12 +171,12 @@ export const EnhancedTable = ({headCells, data}) => {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.title);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.title)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -220,5 +223,6 @@ export const EnhancedTable = ({headCells, data}) => {
 
 EnhancedTable.propTypes = {
     headCells: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    removeItem: PropTypes.func.isRequired
 }

@@ -29,6 +29,10 @@ export const Payment = () => {
         }).catch(err => console.log(err));
     }, [])
 
+    const removeItem = (id) => {
+        setBookData(bookData.filter(item => item.id !== id));
+    }
+
     const headCells = [
         { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
         { id: 'authors', numeric: false, disablePadding: false, label: 'Author(s)' },
@@ -44,7 +48,10 @@ export const Payment = () => {
                     Payment Details
                 </Typography>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                    <EnhancedTable headCells={headCells} data={bookData}/>
+                    <EnhancedTable
+                        headCells={headCells}
+                        data={bookData}
+                    />
                 </div>
             </div>
         </Card>
