@@ -138,18 +138,19 @@ export const EnhancedTable = ({headCells, data, removeItem}) => {
         setPage(0);
     };
 
-    const removeItem = (id) => {
-        setBookData(bookData.filter(item => item.id !== id));
-    };
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    const removeAndDiselect = () => {
+        removeItem(selected);
+        setSelected([]);
+    }
+
     return (
         <div className={classes.root}>
             <div>
-                <EnhancedTableToolbar numSelected={selected.length} removeItem={removeItem}/>
+                <EnhancedTableToolbar numSelected={selected.length} removeItem={removeAndDiselect}/>
                 <TableContainer>
                     <Table
                         className={classes.table}

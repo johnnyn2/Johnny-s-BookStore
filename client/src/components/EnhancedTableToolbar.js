@@ -49,7 +49,9 @@ export const EnhancedTableToolbar = (props) => {
 
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
-                    <IconButton aria-label="delete" onClick={removeItem()}>
+                    <IconButton aria-label="delete" onClick={() => {
+                        removeItem();
+                    }}>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
@@ -66,5 +68,5 @@ export const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
-    removeItem: PropTypes.func.isRequired
+    removeItem: PropTypes.func.isRequired,
 };

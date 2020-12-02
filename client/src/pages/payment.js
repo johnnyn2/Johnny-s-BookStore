@@ -29,8 +29,11 @@ export const Payment = () => {
         }).catch(err => console.log(err));
     }, [])
 
-    const removeItem = (id) => {
-        setBookData(bookData.filter(item => item.id !== id));
+    const removeItem = (ids) => {
+        const remainingBookData = bookData.filter(item => !ids.includes(item.id));
+        setBookData(remainingBookData);
+        const newShoppingCart = remainingBookData.map(item => ({id: item.id, title: item.title, price: item.price}));
+        localStorage.setItem('shoppingCart', JSON.stringify(newShoppingCart));
     }
 
     const headCells = [
@@ -51,6 +54,7 @@ export const Payment = () => {
                     <EnhancedTable
                         headCells={headCells}
                         data={bookData}
+                        removeItem={removeItem}
                     />
                 </div>
             </div>
