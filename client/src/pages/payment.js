@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Card from '@material-ui/core/Card';
-import { Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {EnhancedTable} from '../components/EnhancedTable';
 import {getBooksByIds} from '../util/api';
@@ -45,17 +45,21 @@ export const Payment = () => {
     ];
 
     return (
-        <Card style={{ display: 'flex', flexDirection: 'column', width: '100%', margin: 40 }}>
-            <div style={{margin: 40}}>
-                <Typography  variant="h5" id="tableTitle" component="h1">
+        <Card style={{ display: 'flex', flexDirection: 'column', width: '100%', margin: 40, height: 'calc(100% - 80px)' }}>
+            <div style={{margin: 40, height: 'calc(100% - 80px)'}}>
+                <Typography  variant="h5" id="tableTitle">
                     Payment Details
                 </Typography>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
+                <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100% - 32px)'}}>
                     <EnhancedTable
                         headCells={headCells}
                         data={bookData}
                         removeItem={removeItem}
                     />
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <Typography variant="h5">Total : $ {bookData.length > 0 ? bookData.map(b => b.price).reduce((a, b) => a + b).toFixed(2) : 0}</Typography>
+                        <Button color="primary" size="medium" variant="contained" style={{width: '150px'}}>Purchase</Button>
+                    </div>
                 </div>
             </div>
         </Card>

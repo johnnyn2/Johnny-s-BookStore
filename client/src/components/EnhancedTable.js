@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        height: '100%'
     },
     paper: {
         width: '100%',
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
+        height: '100%'
     },
     visuallyHidden: {
         border: 0,
@@ -102,7 +104,7 @@ export const EnhancedTable = ({headCells, data, removeItem}) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.title);
+            const newSelecteds = rows.map((n) => n.id);
             setSelected(newSelecteds);
             return;
         }
@@ -149,9 +151,9 @@ export const EnhancedTable = ({headCells, data, removeItem}) => {
 
     return (
         <div className={classes.root}>
-            <div>
+            <div style={{height: '100%'}}>
                 <EnhancedTableToolbar numSelected={selected.length} removeItem={removeAndDiselect}/>
-                <TableContainer>
+                <TableContainer style={{height: 'calc(100% - 52px - 64px)', maxHeight: 'calc(100% - 52px - 64px)', overflow: 'hidden'}}>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
@@ -168,7 +170,7 @@ export const EnhancedTable = ({headCells, data, removeItem}) => {
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
-                        <TableBody>
+                        <TableBody style={{height: 'calc(100% - 57px)', maxHeight: 'calc(100% - 57px)', overflow: 'auto'}}>
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
@@ -200,22 +202,16 @@ export const EnhancedTable = ({headCells, data, removeItem}) => {
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 53 * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[]}
                     component="div"
                     count={rows.length}
-                    rowsPerPage={rowsPerPage}
+                    rowsPerPage={5}
                     page={page}
                     onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </div>
         </div>

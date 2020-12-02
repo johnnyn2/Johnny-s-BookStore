@@ -56,11 +56,7 @@ export const EnhancedTableToolbar = (props) => {
                     </IconButton>
                 </Tooltip>
             ) : (
-                    <Tooltip title="Filter list">
-                        <IconButton aria-label="filter list">
-                            <FilterListIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <span />
                 )}
         </Toolbar>
     );
