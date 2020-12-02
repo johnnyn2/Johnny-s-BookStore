@@ -59,7 +59,7 @@ export const Payment = () => {
                     />
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                         <Typography variant="h5">Total : $ {bookData.length > 0 ? bookData.map(b => b.price).reduce((a, b) => a + b).toFixed(2) : 0}</Typography>
-                        <Button color="primary" size="medium" variant="contained" style={{width: '150px'}}>Purchase</Button>
+                        <Button color="primary" size="medium" variant="contained" style={{width: '150px'}} disabled={bookData.length === 0}>Purchase</Button>
                     </div>
                 </div>
             </div>
