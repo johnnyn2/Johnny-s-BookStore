@@ -9,24 +9,25 @@ export const Payment = () => {
     const [bookData, setBookData] = useState([]);
     useEffect(() => {
         const shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
-        console.log('payment: ', shoppingCart);
-        getBooksByIds(shoppingCart.map(item => item.id))
-        .then(res => {
-            console.log(res);
-            const newBookData = res.map(book => {
-                const {authors, categories, id, language, price, title} = book;
-                const data = {
-                    authors: authors.join(", "),
-                    categories: categories.join(", "),
-                    id,
-                    language,
-                    price,
-                    title,
-                };
-                return data;
-            });
-            setBookData(newBookData);
-        }).catch(err => console.log(err));
+        if (typeof shoppingCart !== 'undefined' && shoppingCart !== null) {
+            getBooksByIds(shoppingCart.map(item => item.id))
+            .then(res => {
+                console.log(res);
+                const newBookData = res.map(book => {
+                    const {authors, categories, id, language, price, title} = book;
+                    const data = {
+                        authors: authors.join(", "),
+                        categories: categories.join(", "),
+                        id,
+                        language,
+                        price,
+                        title,
+                    };
+                    return data;
+                });
+                setBookData(newBookData);
+            }).catch(err => console.log(err));
+        }
     }, [])
 
     const removeItem = (ids) => {
