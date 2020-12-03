@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  withRouter,
-  Switch,
-  useHistory
+  Switch
 } from 'react-router-dom';
 import Login from '../user/login';
 import SignUp from '../user/signup';
@@ -20,6 +18,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import css from './App.css';
 import Grow from '@material-ui/core/Grow';
 import { Payment } from '../pages/payment';
+import { PaymentHistory } from '../pages/PaymentHistory';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -77,13 +76,16 @@ function App(props) {
   const controlSnackBar = (open) => setSnackBar((prevState) => ({...prevState, open,}));
 
   useEffect(() => {
+    console.log(snackBar);
     if (localStorage.getItem(ACCESS_TOKEN)) {
-      setSnackBar({
-        open: true,
-        message: "Trying to sign in",
-        severity: "info"
-      })
-      loadCurrentUser();
+      if (!isAuthenticated) {
+        setSnackBar({
+          open: true,
+          message: "Trying to sign in",
+          severity: "info"
+        })
+        loadCurrentUser();
+      }
     }
   }, [])
   return (
@@ -95,6 +97,7 @@ function App(props) {
           <Route exact path="/" render={(props) => <Store isAuthenticated={isAuthenticated} currentUser={currentUser} controlSnackBar={controlSnackBar} setSnackBar={setSnackBar} {...props}/>}/>
           <Route path="/login" render={(props) => <Login setSnackBar={setSnackBar} onLogin={handleLogin} {...props}/>}/>
           <Route path="/payment" render={(props) => <Payment isAuthenticated={isAuthenticated} currentUser={currentUser} controlSnackBar={controlSnackBar} setSnackBar={setSnackBar} {...props}/>}/>
+          <Route path="/history" render={(props) => <PaymentHistory {...props}/>}></Route>
           <Route path="/signup" render={(props) => <SignUp setSnackBar={setSnackBar} {...props}/>}></Route>
           <Route component={NotFound}></Route>
         </Switch>

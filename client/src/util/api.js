@@ -106,3 +106,18 @@ export const getBooksByIds = (bookIds) => {
         body: JSON.stringify(bookIds)
     })
 }
+
+export const addOrder = ({bookIds, amount, userId}) => {
+    return request({
+        url: API_BASE_URL + '/pay/addOrder',
+        method: 'POST',
+        body: JSON.stringify({bookIds, amount, userId})
+    })
+}
+
+export const getOrdersByUserId = (userId) => {
+    return request({
+        url: API_BASE_URL + '/pay/getOrdersByUserId?userId=' + userId,
+        method: 'POST'
+    })
+}

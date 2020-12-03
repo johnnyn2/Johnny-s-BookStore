@@ -10,7 +10,7 @@ public class AddOrder {
     private double amount;
 
     @NotNull
-    private String userEmail;
+    private Long userId;
 
     public Long[] getBookIds() {
         return bookIds;
@@ -28,11 +28,11 @@ public class AddOrder {
         this.amount = amount;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

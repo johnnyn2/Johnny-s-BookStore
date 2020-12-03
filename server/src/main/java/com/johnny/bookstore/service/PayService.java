@@ -43,7 +43,7 @@ public class PayService {
                 orderItems.add(orderItem);
             });
             order.setOrderItem(orderItems);
-            User user = userRepository.findByEmail(orderBody.getUserEmail()).orElseThrow(() -> new UsernameNotFoundException ("Add Order Error: User not found with email - " + orderBody.getUserEmail()));
+            User user = userRepository.findById(orderBody.getUserId()).orElseThrow(() -> new UsernameNotFoundException ("Add Order Error: User not found with userId - " + orderBody.getUserId()));
             order.setUser(user);
             return orderRepository.save(order);
         } catch (Exception e) {
@@ -56,8 +56,8 @@ public class PayService {
         return orderRepository.findAll();
     }
 
-    public List<OrderHistory> getOrdersByUserId(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("getOrdersByUserId Error: User not found with email - " + userEmail));
+    public List<OrderHistory> getOrdersByUserId(String userId) {
+        User user = userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new UsernameNotFoundException("getOrdersByUserId Error: User not found with userId - " + userId));
         List<Order> orders = orderRepository.getOrdersByUserId(user.getId());
         List<OrderHistory> orderHistory = orders.stream().map(order -> new OrderHistory(
             order.getId(),

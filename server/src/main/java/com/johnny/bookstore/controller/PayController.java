@@ -1,6 +1,8 @@
 package com.johnny.bookstore.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.johnny.bookstore.model.Order;
 import com.johnny.bookstore.payload.request.AddOrder;
@@ -22,8 +24,15 @@ public class PayController {
     private PayService payService;
 
     @PostMapping("/addOrder")
-    public Order addOrder(@RequestBody AddOrder orderBody) {
-        return payService.addOrder(orderBody);        
+    public Map<String, String> addOrder(@RequestBody AddOrder orderBody) {
+        Map<String, String> result = new HashMap<>();
+        Order order = payService.addOrder(orderBody);
+        if (order != null) {
+            result.put("status", "success");
+        } else {
+            result.put("status", "fail");
+        }
+        return result;
     }
 
     @GetMapping("/getAllOrders")
@@ -31,8 +40,17 @@ public class PayController {
         return payService.getAllOrders();
     }
 
-    @PostMapping("/getOrdersByUserEmail")
-    public List<OrderHistory> getOrdersByUserId(@RequestParam("email") String userEmail) {
-        return payService.getOrdersByUserId(userEmail);
+    @PostMapping("/getOrdersByUserId")
+    public Map<String, Object> getOrdersByUserId(@RequestParam("userId") String userId) {
+        Map<String, Object> result = new HashMap<>();
+        List<OrderHistory> history =  payService.getOrdersByUserId(userId);
+        if (history != null) {
+            result.put("status", "success");
+            result.put("history", history);
+        } else {
+            result.put("status", "fail");
+            result.put("history", new HashMap<>());
+        }
+        return result;
     }
 }

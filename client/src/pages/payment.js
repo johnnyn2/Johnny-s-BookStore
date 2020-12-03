@@ -3,9 +3,9 @@ import Card from '@material-ui/core/Card';
 import { Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {EnhancedTable} from '../components/EnhancedTable';
-import {getBooksByIds} from '../util/api';
+import {getBooksByIds, addOrder} from '../util/api';
 
-export const Payment = () => {
+export const Payment = ({currentUser, setSnackBar}) => {
     const [bookData, setBookData] = useState([]);
     useEffect(() => {
         const shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
@@ -37,6 +37,24 @@ export const Payment = () => {
         localStorage.setItem('shoppingCart', JSON.stringify(newShoppingCart));
     }
 
+    const removeAll = () => {
+        setBookData([]);
+        localStorage.setItem('shoppingCart', JSON.stringify([]))
+    }
+
+    const submitOrder = () => {
+        addOrder({
+            bookIds: bookData.map(book => book.id),
+            amount: bookData.map(book => book.price).reduce((a, b) => a + b),
+            userId: currentUser.id
+        }).then(res => {
+            if (res.status === 'success') {
+                removeAll();
+                setSnackBar({open: true, message: 'Payment Complete', severity: 'success'})
+            }
+        }).catch(err => console.log(err))
+    }
+
     const headCells = [
         { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
         { id: 'authors', numeric: false, disablePadding: false, label: 'Author(s)' },
@@ -59,7 +77,7 @@ export const Payment = () => {
                     />
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                         <Typography variant="h5">Total : $ {bookData.length > 0 ? bookData.map(b => b.price).reduce((a, b) => a + b).toFixed(2) : 0}</Typography>
-                        <Button color="primary" size="medium" variant="contained" style={{width: '150px'}} disabled={bookData.length === 0}>Purchase</Button>
+                        <Button onClick={() => submitOrder()} color="primary" size="medium" variant="contained" style={{width: '150px'}} disabled={bookData.length === 0}>Purchase</Button>
                     </div>
                 </div>
             </div>
@@ -69,4 +87,10 @@ export const Payment = () => {
 
 Payment.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
+    currentUser: PropTypes.shape({
+        id: PropTypes.number,
+        username: PropTypes.string,
+        name: PropTypes.string
+    }),
+    setSnackBar: PropTypes.func.isRequired
 }
