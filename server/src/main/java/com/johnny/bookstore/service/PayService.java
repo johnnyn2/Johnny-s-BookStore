@@ -9,13 +9,16 @@ import com.johnny.bookstore.model.Order;
 import com.johnny.bookstore.model.OrderItem;
 import com.johnny.bookstore.model.User;
 import com.johnny.bookstore.payload.request.AddOrder;
+import com.johnny.bookstore.payload.response.OrderHistory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 @Service
 public class PayService {
     @Autowired
@@ -52,5 +55,22 @@ public class PayService {
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
+    }
+
+    public List<OrderHistory> getOrdersByUserId(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("getOrdersByUserId Error: User not found with email - " + userEmail));
+        List<Order> orders = orderRepository.getOrdersByUserId(user.getId());
+        List<OrderHistory> orderHistory = orders.stream().map(order -> new OrderHistory(
+            order.getId(),
+            order.getAmount(),
+            user.getId(),
+            user.getUsername(),
+            user.getName(),
+            user.getEmail(),
+            order.getOrderItem(),
+            order.getCreatedAt(),
+            order.getUpdatedAt()
+        )).collect(Collectors.toList());
+        return orderHistory;
     }
 }

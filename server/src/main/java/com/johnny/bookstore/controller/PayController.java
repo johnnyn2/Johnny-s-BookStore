@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.johnny.bookstore.model.Order;
 import com.johnny.bookstore.payload.request.AddOrder;
+import com.johnny.bookstore.payload.response.OrderHistory;
 import com.johnny.bookstore.service.PayService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,5 +29,10 @@ public class PayController {
     @GetMapping("/getAllOrders")
     public List<Order> getAllOrders() {
         return payService.getAllOrders();
+    }
+
+    @PostMapping("/getOrdersByUserEmail")
+    public List<OrderHistory> getOrdersByUserId(@RequestParam("email") String userEmail) {
+        return payService.getOrdersByUserId(userEmail);
     }
 }
