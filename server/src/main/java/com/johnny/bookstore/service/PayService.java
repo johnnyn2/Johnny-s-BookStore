@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.OrderRepository;
 import com.johnny.bookstore.repository.UserRepository;
-import com.johnny.bookstore.service.BookService;
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.model.Order;
 import com.johnny.bookstore.model.OrderItem;
@@ -14,14 +13,9 @@ import com.johnny.bookstore.payload.request.AddOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
-
 @Service
 public class PayService {
     @Autowired
@@ -46,8 +40,6 @@ public class PayService {
                 orderItem.setOrder(order);
                 orderItems.add(orderItem);
             });
-            System.out.println("books length: " + books.size());
-            System.out.println("order items length: " + orderItems.size());
             order.setOrderItem(orderItems);
             User user = userRepository.findByEmail(orderBody.getUserEmail()).orElseThrow(() -> new UsernameNotFoundException ("Add Order Error: User not found with email - " + orderBody.getUserEmail()));
             order.setUser(user);

@@ -1,7 +1,5 @@
 package com.johnny.bookstore.payload.request;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 public class AddOrder {
