@@ -4,9 +4,12 @@ import { Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {EnhancedTable} from '../components/EnhancedTable';
 import {getBooksByIds, addOrder} from '../util/api';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const Payment = ({currentUser, setSnackBar}) => {
     const [bookData, setBookData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         const shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
         if (typeof shoppingCart !== 'undefined' && shoppingCart !== null) {
@@ -43,6 +46,7 @@ export const Payment = ({currentUser, setSnackBar}) => {
     }
 
     const submitOrder = () => {
+        setIsLoading(true);
         addOrder({
             bookIds: bookData.map(book => book.id),
             amount: bookData.map(book => book.price).reduce((a, b) => a + b),
@@ -50,9 +54,13 @@ export const Payment = ({currentUser, setSnackBar}) => {
         }).then(res => {
             if (res.status === 'success') {
                 removeAll();
-                setSnackBar({open: true, message: 'Payment Complete', severity: 'success'})
+                setSnackBar({open: true, message: 'Payment completed. You will receive an email shortly.', severity: 'success'})
             }
-        }).catch(err => console.log(err))
+            setIsLoading(false);
+        }).catch(err => {
+            console.log(err);
+            setIsLoading(false);
+        })
     }
 
     const headCells = [
@@ -65,7 +73,7 @@ export const Payment = ({currentUser, setSnackBar}) => {
 
     return (
         <Card style={{ display: 'flex', flexDirection: 'column', width: '100%', margin: 40, height: 'calc(100% - 80px)' }}>
-            <div style={{margin: 40, height: 'calc(100% - 80px)'}}>
+            <div style={{margin: 40, height: 'calc(100% - 80px)', position: 'relative'}}>
                 <Typography  variant="h5" id="tableTitle">
                     Payment Details
                 </Typography>
@@ -77,9 +85,30 @@ export const Payment = ({currentUser, setSnackBar}) => {
                     />
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                         <Typography variant="h5">Total : $ {bookData.length > 0 ? bookData.map(b => b.price).reduce((a, b) => a + b).toFixed(2) : 0}</Typography>
-                        <Button onClick={() => submitOrder()} color="primary" size="medium" variant="contained" style={{width: '150px'}} disabled={bookData.length === 0}>Purchase</Button>
+                        <Button
+                            onClick={() => submitOrder()}
+                            color="primary"
+                            size="medium"
+                            variant="contained"
+                            style={{width: '150px'}}
+                            disabled={bookData.length === 0 || isLoading}
+                        >Purchase</Button>
                     </div>
                 </div>
+                <div id="overlay" style={{
+                    position: 'absolute',
+                    width: '100%', height: '100%',
+                    zIndex: 10,
+                    top: 0,
+                    left: 0,
+                    visibility: isLoading ? 'visible' : 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <CircularProgress/>
+                </div>
+                
             </div>
         </Card>
     );

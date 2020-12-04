@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <p>Dear <span th:text="${name}"></span>,</p>
+    <p>Your payment has been completed. Thank you for your order.</p>
+    <div>
+      <p>Ordered Items: </p>
+      <table>
+        <thead>
+          <tr><th>Title</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="item: ${items}">
+            <td th:text="${item.title}"></td>
+            <td th:text="${item.price}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h5>Total: <span th:text="${amount}"></span></h5>
+    <p>Regards,</p>
+    <p th:text="${sender}"></p>
+  </body>
+</html>

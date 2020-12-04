@@ -14,8 +14,10 @@ import com.johnny.bookstore.payload.response.OrderHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 @Service
@@ -28,6 +30,9 @@ public class PayService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public Order addOrder(AddOrder orderBody) {
         Order order = new Order();
@@ -45,7 +50,17 @@ public class PayService {
             order.setOrderItem(orderItems);
             User user = userRepository.findById(orderBody.getUserId()).orElseThrow(() -> new UsernameNotFoundException ("Add Order Error: User not found with userId - " + orderBody.getUserId()));
             order.setUser(user);
-            return orderRepository.save(order);
+            Order newOrder = orderRepository.save(order);
+            if (newOrder != null) {
+                Map<String, Object> templateModel = new HashMap<>();
+                templateModel.put("name", user.getName());
+                templateModel.put("items", books);
+                templateModel.put("amount", Double.toString(order.getAmount()));
+                templateModel.put("sender", "Johnny Ho");
+                // emailService.sendMessageUsingThymeleafTemplate(new String[]{user.getEmail()}, "Payment Confirmation", "payment_invoice.html", templateModel);
+                emailService.sendMessageUsingFreemarkerTemplate(new String[]{user.getEmail()}, "Payment Confirmation", "payment_invoice.ftl", templateModel);
+            }
+            return newOrder;
         } catch (Exception e) {
             e.printStackTrace();
         }
