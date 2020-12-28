@@ -38,7 +38,7 @@ springboot-angular-aws-fargate</a></li>
   <li>Update EC2 instance: <code>sudo yum update -y</code></li>
   <li>Install docker on EC2 instance: <code>sudo yum install -y docker</code></li>
   <li>Start docker: <code>sudo service docker start</code></li>
-  <li>Run docker image for your api: <code>docker run -d --name {containerName} -p 80:8080 johnnyhohohohohoho/johnny-bookstore</code></li>
+  <li>Run docker image for your api: <code>docker run -d --name {containerName} -p 8080:8080 johnnyhohohohohoho/johnny-bookstore</code></li>
   <li>Reference: <a href="https://www.youtube.com/watch?v=a5yR8wYkggs">Full-Stack Spring Boot with Angular CRUD API application with MYSQL on AWS | AWS EC2 | AWS S3 | RDS</a></li>
   <li>Github: <a href="https://github.com/shameed1910/springboot-crud-api" >shameed1910
 /
