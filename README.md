@@ -13,7 +13,7 @@ This is a personal project to practice my skills in React, Spring Boot, JPQL, Do
   <li>Reference: <a href="https://www.youtube.com/watch?v=a5yR8wYkggs">Full-Stack Spring Boot with Angular CRUD API application with MYSQL on AWS | AWS EC2 | AWS S3 | RDS</a></li>
 </ol>
 
-## Deploy backend api to AWS ECS/EKS</h2>
+## Deploy backend api to AWS ECS</h2>
 <ol>
   <li>Modify database link in application.properties to the cloud database link</li>
   <li>Generate .war file: <code>mvn clean install -DskipTests=true</code></li>
