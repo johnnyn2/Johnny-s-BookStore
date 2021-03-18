@@ -19,7 +19,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 public class BookstoreApplication extends SpringBootServletInitializer {
 	@PostConstruct
 	void init() {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Hong_Kong"));
 	}
 
 	public static void main(String[] args) {

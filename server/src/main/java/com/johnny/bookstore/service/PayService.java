@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.johnny.bookstore.repository.BookRepository;
 import com.johnny.bookstore.repository.OrderRepository;
 import com.johnny.bookstore.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.johnny.bookstore.model.Book;
 import com.johnny.bookstore.model.Order;
 import com.johnny.bookstore.model.OrderItem;
@@ -72,6 +73,10 @@ public class PayService {
             User user = userRepository.findById(orderBody.getUserId()).orElseThrow(() -> new UsernameNotFoundException ("Add Order Error: User not found with userId - " + orderBody.getUserId()));
             order.setUser(user);
             Order newOrder = orderRepository.save(order);
+            Instant ca = newOrder.getCreatedAt();
+            Date d = Date.from(ca);
+            String formattedd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").format(d);
+            logger.info("New ORDER ID "+ newOrder.getId() + " is created by USER ID "+ newOrder.getUser().getId() + " at " + formattedd);
             if (newOrder != null) {
                 try {
                     Map<String, Object> templateModel = new HashMap<>();
