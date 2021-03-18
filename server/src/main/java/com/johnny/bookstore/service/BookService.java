@@ -53,7 +53,7 @@ public class BookService {
     @Autowired
     AuthorRepository authorRepository;
 
-    private final String BOOK_GALLERY_COVER = "C:/Users/johnnyho/Documents/spring-react-app/images";
+    private final String BOOK_GALLERY_COVER = "D:/work/spring-react-app/images";
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Book addBook(AddBook addBook) {

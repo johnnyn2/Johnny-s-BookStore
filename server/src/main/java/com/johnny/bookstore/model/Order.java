@@ -15,6 +15,13 @@ import javax.persistence.Table;
 
 import com.johnny.bookstore.model.audit.DateAudit;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order extends DateAudit{
@@ -30,41 +37,4 @@ public class Order extends DateAudit{
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItem = new HashSet<>();
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Order() {
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<OrderItem> getOrderItem() {
-        return orderItem;
-    }
-
-    public void setOrderItem(Set<OrderItem> orderItem) {
-        this.orderItem = orderItem;
-    }
-
-   
 }
