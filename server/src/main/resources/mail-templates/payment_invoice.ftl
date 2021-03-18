@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <#list items as item>
-            <tr><td>${item.title}<td><td>${item.price}</td></tr>
+            <tr><td>${item.title}</td><td>${item.price}</td></tr>
           </#list>
         </tbody>
       </table>
