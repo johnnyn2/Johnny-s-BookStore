@@ -28,17 +28,20 @@ springboot-angular-aws-fargate</a></li>
 
 ## Deploy backend api to AWS EC2
 <ol>
-  <li>Choose an EC2 instance in AWS Management Console</li>
-  <li>Store the key-pair for accessing the EC2 instance</li>
-  <li>Modify database link in application.properties to the cloud database</li>
-  <li>Generate .war file: <code>mvn clean install -DskipTests=true</code></li>
-  <li>Build an image(<a href="https://hub.docker.com/repository/docker/johnnyhohohohohoho/johnny-bookstore/general">repo here</a>) for the api: <code>docker build -t johnnyhohohohohoho/johnny-bookstore:1.0 .</code></li>
-  <li>Push to docker hub: <code>docker push johnnyhohohohohoho/johnny-bookstore:1.0</code></li>
-  <li>Use ssh to connect to the EC2 (the command would be provided by the AWS EC2 setup page)</li>
-  <li>Update EC2 instance: <code>sudo yum update -y</code></li>
-  <li>Install docker on EC2 instance: <code>sudo yum install -y docker</code></li>
-  <li>Start docker: <code>sudo service docker start</code></li>
-  <li>Run docker image for your api: <code>docker run -d --name {containerName} -p 8080:8080 johnnyhohohohohoho/johnny-bookstore</code></li>
+  <li>Choose an AMI (Amazon Machine Image) for EC2 instance in AWS Management Console</li>
+  <li>Choose EC2 instance type</li>
+  <li>In security group section, click Add Rule button to add a rule allow TCP traffic on port 8080</li>
+  <li>Store the key-pair .pem for accessing the EC2 instance</li>
+  <li>Modify database link in application.properties to the cloud database. A better way is to separate  *-dev.properties and *-prod.properties file for different database enpoints</li>
+  <li>Generate .war file: <code>mvn clean install -DskipTests=true</code> or generate .jar file by <code>./gradlew bootJar</code></li>
+  <li>Create a deploy.sh file to copy the executable jar/war to the ec2 using the .pem file to connect to ec2</li>
+  <li>Include ssh command to connect to the EC2 (the command would be provided by the AWS EC2 setup page) in deploy.sh</li>
+  <li>Kill the previous running process</li>
+  <li>Restart the updated project by <code>java -jar xxxx-SNAPSHOOT.jar / xxxx-SNAPSHOOT.war</code></li>
+  <li>
+    Reference: 
+    <a href="https://medium.com/@kgaurav23/deploying-hosting-spring-boot-applications-on-aws-ec2-7babc15a1ab6">Deploying/Hosting Spring Boot Applications on AWS EC2</a>
+  </li>
   <li>Reference: <a href="https://www.youtube.com/watch?v=a5yR8wYkggs">Full-Stack Spring Boot with Angular CRUD API application with MYSQL on AWS | AWS EC2 | AWS S3 | RDS</a></li>
   <li>Github: <a href="https://github.com/shameed1910/springboot-crud-api" >shameed1910
 /
@@ -51,5 +54,6 @@ springboot-crud-api</a></li>
   <li><code>npm install</code></li>
   <li><code>npm run build</code></li>
   <li>upload the content in build folder to the AWS S3 bucket</li>
+  <li>In the bucket Properties section, choose "Static website hosting" and save</li>
 </ol>
 
