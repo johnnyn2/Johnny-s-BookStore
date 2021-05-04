@@ -15,11 +15,15 @@ This is a personal project to practice my skills in React, Spring Boot, JPQL, Do
 
 ## Deploy backend api to AWS ECS</h2>
 <ol>
-  <li>Modify database link in application.properties to the cloud database link</li>
+  <li>Create MySQL database container in ECS Fargate task</li>
+  <li>Modify database link in application.properties to the previous created MySQL endpoint</li>
   <li>Generate .war file: <code>mvn clean install -DskipTests=true</code></li>
   <li>Build an image(<a href="https://hub.docker.com/repository/docker/johnnyhohohohohoho/johnny-bookstore/general">repo here</a>) for the api: <code>docker build -t johnnyhohohohohoho/johnny-bookstore:1.0 .</code></li>
-  <li>Push to docker hub: <code>docker push johnnyhohohohohoho/johnny-bookstore:1.0</code></li>
+  <li>Push to docker hub: <code>docker push johnnyhohohohohoho/johnny-bookstore:1.0</code> or AWS ECR</li>
   <li>In AWS ECS, setup container for the backend by coping the image link(docker.io/johnnyhohohohohoho/johnny-bookstore:1.0) in docker hub</li>
+  <li>For the React frontend, modify the request endpoint and build a docker image for it</li>
+  <li>Push the frontend image to docker hub or ECR</li>
+  <li>In AWS ECS, setup container for the frontend image</li>
   <li>Reference: <a href="https://www.youtube.com/watch?v=zJMqCjc2qIc">Spring Boot + Angular + MYSQL on AWS ECS Fargate | AWS ECS Fargate</a></li>
   <li>Github: <a href="https://github.com/shameed1910/springboot-angular-aws-fargate">shameed1910
 /
